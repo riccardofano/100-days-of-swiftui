@@ -41,3 +41,54 @@ let hasParentalConsent = true
 if userAge >= 18 || hasParentalConsent {
     print("You can buy the game")
 }
+
+enum Weather {
+    case sun, rain, wind, snow, unknown
+}
+
+let forecast = Weather.wind
+// Swift has switch statements too
+// cases don't fall through like in C
+// switch statements have to exhaustive like with Rust match statements
+switch forecast {
+case .sun:
+    print("It should be a nice day.")
+case rain:
+    print("Pack an umbrella.")
+case wind:
+    print("Wear something warm.")
+case snow:
+    print("School is cancelled.")
+case unknown:
+    print("Prepare for the worst.")
+}
+
+let name = "Riccardo"
+// you can provide a catchall case with `default`
+switch name {
+case "Riccardo":
+    print("Ciao Riki")
+default:
+    print("I don't know who you are.")
+}
+
+let day = 5
+print("My true love gave to me…")
+
+// You can have cases fall through by explicitly using the keyword `fallthrough`
+switch day {
+case 5:
+    print("5 golden rings")
+    fallthrough
+case 4:
+    print("4 calling birds")
+    fallthrough
+case 3:
+    print("3 French hens")
+    fallthrough
+case 2:
+    print("2 turtle doves")
+    fallthrough
+default:
+    print("A partridge in a pear tree")
+}
