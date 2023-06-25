@@ -22,3 +22,22 @@ let word = ""
 if word.isEmpty {
     print("word was empty")
 }
+
+let age = 16
+
+// else if and else are also present, as you'd hope
+if age >= 18 {
+    print("You can vote at the next election")
+} else if age >= 16 {
+    print("You are so close to being able to vote")
+} else {
+    print("You'll have to wait a bit more before you'll be allowed to vote")
+}
+
+// There are the logical operators && (and) and || (or) that let you chain conditionals
+let userAge = 14
+let hasParentalConsent = true
+
+if userAge >= 18 || hasParentalConsent {
+    print("You can buy the game")
+}
