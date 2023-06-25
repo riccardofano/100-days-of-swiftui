@@ -89,3 +89,9 @@ enum WeekendDay {
 // After Swift knows the type you can omit the enum name and just specify the variant with a dot before it
 var otherDay = Weekday.friday
 otherDay = .monday
+
+// You must specify a type if you're not assigning a value at the same time,
+// Swift doesn't assign types based on later usage it seems
+let username: String
+username = "riccardofano"
+print(username)
