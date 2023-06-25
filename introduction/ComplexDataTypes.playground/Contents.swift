@@ -57,3 +57,12 @@ var heights = [String: Int]()
 heights["Yao Ming"] = 229
 
 // Dictionaries also have .count and .removeAll() like arrays
+
+// Sets
+var people = Set(["Denzel Washington", "Tom Cruise", "Nicolas Cage", "Samuel L Jackson"])
+print(people)
+
+// You use .insert() instead of .append() to add elements because the data is not ordered.
+people.insert("Me")
+// Sets also have .count and similar things to arrays and dictionaries
+// Other information about sets is not Swift specific
