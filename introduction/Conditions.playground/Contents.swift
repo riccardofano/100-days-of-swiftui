@@ -92,3 +92,14 @@ case 2:
 default:
     print("A partridge in a pear tree")
 }
+
+// Swift has ternary operators, they're the same as in Javascript for instance
+let canVote = age >= 18 ? "Yes" : "No"
+
+// It seems if statements are not expressions like in Rust, you can't do:
+// let result = if condition {
+//     "True"
+// } else {
+//     "False"
+// }
+
