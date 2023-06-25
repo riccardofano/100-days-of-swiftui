@@ -66,3 +66,26 @@ print(people)
 people.insert("Me")
 // Sets also have .count and similar things to arrays and dictionaries
 // Other information about sets is not Swift specific
+
+// Enums
+enum Weekday {
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+}
+
+var day = Weekday.monday
+day = Weekday.tuesday
+day = Weekday.wednesday
+
+// You can specify each day as its own case keyword
+// or you can separate them with commas in one line
+enum WeekendDay {
+    case saturday, sunday
+}
+
+// After Swift knows the type you can omit the enum name and just specify the variant with a dot before it
+var otherDay = Weekday.friday
+otherDay = .monday
