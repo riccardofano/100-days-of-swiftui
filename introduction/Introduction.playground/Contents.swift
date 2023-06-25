@@ -23,6 +23,8 @@ let quote = "Then he tapped a sign saying \"Believe\" and walked away."
 
 // triple quotes for multi line comments
 // and that also allows you to type double quotes normally
+// the """ must be on a line on their own, both the opening and closing ones
+// they don't create new lines at the start or end
 let movie = """
 A day in
 the life of an
