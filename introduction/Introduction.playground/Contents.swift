@@ -95,3 +95,13 @@ var actorName = "Nicolas Cage"
 
 var rating = 5.0
 rating *= 2
+
+let goodDogs = true
+var gameOver = false
+
+// You can toggle the bool with the not (!) operator
+gameOver = !gameOver
+// Or you can use the toggle() method from the standard library
+gameOver.toggle()
+
+// Not much to say here, it's just your standard boolean things
