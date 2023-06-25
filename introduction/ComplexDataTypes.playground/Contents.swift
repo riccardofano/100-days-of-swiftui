@@ -37,3 +37,23 @@ let sortedCities = cities.sorted()
 // .reversed() doesn't actually reverse the array it wraps it in a data structure which tells Swift that it's supposed to be reversed
 let reversedCities = cities.reversed()
 print(reversedCities)
+
+// Dictionaries are declared with [] instead of {} like most languages
+// they look like arrays but have `key: value` pairs instead of just values
+// the keys are also surrounded by quotes which is unusual, this is because you can specify type you want, it's not restricted to strings and numbers like in, for example, Javascript
+let employee = [
+    "name": "Taylor Swift",
+    "job": "Singer",
+    "location": "Nashville"
+]
+
+// you can get the value by using dict["key"]
+// you don't seem to be able to use dict.key
+// accessing a dictionary returns an Optional, you can specify a default value in the [] after the key
+print(employee["name", default: "unknown"])
+
+// You can make an empty dictionary just like with Arrays
+var heights = [String: Int]()
+heights["Yao Ming"] = 229
+
+// Dictionaries also have .count and .removeAll() like arrays
