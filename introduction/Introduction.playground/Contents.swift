@@ -64,3 +64,17 @@ counter -= 3
 let number = 120
 // there's a method in the standard library for `number % 3 == 0`, nice
 print(number.isMultiple(of: 3))
+
+/*
+NOTE: type information
+Integers:
+   Int: signed 32 or 64 bits (depending on your system architecture) number
+   UInt: same thing but unsigned
+   you can choose between 8, 16, 32, and 64 bits versions
+   Int8, Uint8, Int16, Uint16, Int32, Uint32, Int64, Uint64
+TIP: use `Int` by default for better interopability
+ 
+Floating point numbers:
+  Float: 32 bit signed floating point number
+  Double: 64 bit signed floating point number
+*/
