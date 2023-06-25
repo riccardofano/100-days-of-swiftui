@@ -68,7 +68,7 @@ print(number.isMultiple(of: 3))
 /*
 NOTE: type information
 Integers:
-   Int: signed 32 or 64 bits (depending on your system architecture) number
+   Int: signed 32 or 64 bits (depending on your system architecture) number (default)
    UInt: same thing but unsigned
    you can choose between 8, 16, 32, and 64 bits versions
    Int8, Uint8, Int16, Uint16, Int32, Uint32, Int64, Uint64
@@ -76,5 +76,22 @@ TIP: use `Int` by default for better interopability
  
 Floating point numbers:
   Float: 32 bit signed floating point number
-  Double: 64 bit signed floating point number
+  Double: 64 bit signed floating point number (default)
 */
+
+// one is an integer
+let one = 1
+// two is a double precision floating point number
+let two = 2.0
+
+// Swift is a type safe language, it won't let you mix types unless cast first
+// let three = one + two // Error
+let three: Int = one + Int(two)
+let otherThree: Double = Double(one) + two
+
+// You can't reassign values of different types to variables
+var actorName = "Nicolas Cage"
+// name = 57
+
+var rating = 5.0
+rating *= 2
