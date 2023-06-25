@@ -105,3 +105,18 @@ gameOver = !gameOver
 gameOver.toggle()
 
 // Not much to say here, it's just your standard boolean things
+
+// You can concatenate strings with +
+let firstPart = "Hello, "
+let secondPart = "world!"
+var greeting2 = firstPart + secondPart
+
+// NOTE: you can't shadow variables (redeclare them to replace them and their type info) in the global scope at least.
+// From what I've seen online you can do it in functions and when using if let but I'll have to research a bit more.
+
+let myName = "Riccardo"
+let age = 27
+// You can use string interpolation with \(variable)
+let message = "Hello, my name is \(myName) and I'm \(age) years old"
+// You can use numbers with string interpolation to stringify them implicitly
+print("5 x 5 is \(5 * 5)")
