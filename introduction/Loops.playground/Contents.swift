@@ -18,3 +18,18 @@ for i in 1...12 {
 for _ in 1...5 {
     print("Hello")
 }
+
+var countdown = 10
+// while loops
+while countdown > 0 {
+    print("\(countdown)…")
+    countdown -= 1
+}
+
+print("Blast off!")
+
+// there's a method on numbers to generate a number in a range
+let roll = Int.random(in: 1...6)
+let float = Double.random(in: 0..<1)
+
+print(float)
