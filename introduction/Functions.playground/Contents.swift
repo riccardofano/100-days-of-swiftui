@@ -62,3 +62,23 @@ print(getUser3().0)
 let (firstName, lastName) = getUser()
 // the variable name can be whatever you want and you can ignore a value with an underscore
 let (name, _) = getUser()
+
+// you can overload functions with the same name but different param names
+func hireEmployee(name: String) { }
+func hireEmployee(title: String) { }
+func hireEmployee(location: String) { }
+
+// you can add an _ before the param name to allow the function to be called without specifying the argument name
+func isUppercase(_ string: String) -> Bool {
+    string == string.uppercased()
+}
+let string = "HELLO, WORLD"
+let result = isUppercase(string)
+
+// actually you can specify any name you want to a param so you can use a different name in the function body than the one when you call it
+func printTimesTables(for number: Int) {
+    for i in 1...12 {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+printTimesTables(for: 5)
