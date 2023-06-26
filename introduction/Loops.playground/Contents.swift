@@ -33,3 +33,32 @@ let roll = Int.random(in: 1...6)
 let float = Double.random(in: 0..<1)
 
 print(float)
+
+let filenames = ["me.jpg", "work.txt", "sophie.jpg", "logo.psd"]
+
+// continue stops the current loop body execution and goes directly to the next iteration
+for filename in filenames {
+    if filename.hasSuffix(".jpg") == false {
+        continue
+    }
+
+    print("Found picture: \(filename)")
+}
+
+// break breaks out of the loop entirely
+// plenty of languages use these so they're nothing new
+let number1 = 4
+let number2 = 14
+var multiples = [Int]()
+
+for i in 1...100_000 {
+    if i.isMultiple(of: number1) && i.isMultiple(of: number2) {
+        multiples.append(i)
+
+        if multiples.count == 10 {
+            break
+        }
+    }
+}
+
+print(multiples)
