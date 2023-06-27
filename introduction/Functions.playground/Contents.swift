@@ -91,3 +91,61 @@ func printTimesTables(for number: Int = 5, end: Int) {
     }
 }
 printTimesTables(end: 12)
+
+// you can create your own Error enum by extending the build in Error protocol
+enum PasswordError: Error {
+    case short, obvious
+}
+
+// if a function can throw an error you must say it after the closing paren
+func checkPassword(_ password: String) throws -> String {
+    if password.count < 5 {
+        throw PasswordError.short
+    }
+
+    if password == "12345" {
+        throw PasswordError.obvious
+    }
+
+    if password.count < 8 {
+        return "OK"
+    } else if password.count < 10 {
+        return "Good"
+    } else {
+        return "Excellent"
+    }
+}
+
+
+let str = "12345"
+// function calls that can throw have to be marked with try
+// try checkPassword(str)
+
+// to catch errors you have to use a do/catch block and put the try functions within the do
+do {
+    let result = try checkPassword(str)
+    print("Password rating: \(result)")
+} catch {
+    print("There was an error.")
+}
+
+// you can use try! to call a throwing function outside a do block,
+// this will crash the program if it throws
+try! checkPassword(string)
+
+do {
+    let result = try checkPassword(str)
+    print("Password rating: \(result)")
+    // you can specify the error you want to catch
+} catch PasswordError.obvious {
+    print("This password is too obvious.")
+} catch PasswordError.short {
+    print("This password is too short.")
+    // but you must always have a catchall catch,
+    // I wish they let you specify the type of the thrown error,
+    // this doesn't make much sense when you're already using an Error enum in my opinion
+} catch {
+    print("There was an error.")
+}
+
+// TIP: a lot of errors coming from Apple have a description accessible from error.localizedDescription
