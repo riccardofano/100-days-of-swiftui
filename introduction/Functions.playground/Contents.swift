@@ -82,3 +82,12 @@ func printTimesTables(for number: Int) {
     }
 }
 printTimesTables(for: 5)
+
+// you can specify a default value for a param with a = value after the type
+// default values don't have to be at the end of the parameter list
+func printTimesTables(for number: Int = 5, end: Int) {
+    for i in 1...end {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+printTimesTables(end: 12)
