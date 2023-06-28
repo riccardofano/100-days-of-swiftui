@@ -89,3 +89,23 @@ var tommy = Employee3(name: "Tommy")
 print(tommy.vacationRemaining2)
 tommy.vacationRemaining2 += 5
 print(tommy.vacationRemaining2)
+
+struct Game {
+    var score = 0 {
+        // you can use willSet or didSet to run some code just before or after a property has been updated
+        willSet {
+            print("Game score was: \(score)")
+            // Swift provides a `newValue` variable inside willSet too
+            print("The new score is going to be \(newValue)")
+        }
+        // or just after
+        didSet {
+            print("Game score is now: \(score)")
+            // and in didSet you have access to `oldValue` instead
+            print("The old game score was: \(oldValue)")
+        }
+    }
+}
+
+var game = Game()
+game.score += 10
