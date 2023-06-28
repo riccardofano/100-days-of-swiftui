@@ -163,3 +163,23 @@ struct BankAccount {
 let account = BankAccount()
 // this is not allowed with a private funds property
 // account.funds -= 100
+
+struct School {
+    // static properties are shared between all instances of this struct
+    static var studentCount = 0
+
+    // static methods can be called without creating an instance of the struct
+    // you don't need `mutating` when mutating static properties in static methods
+    static func add(student: String) {
+        print("\(student) joined the school.")
+        studentCount += 1
+    }
+}
+
+struct Game2 {
+    var score: Int
+    var isOver: Bool
+    
+    // you can create static instances of the struct in the struct itself
+    static let example = Self(score: 5, isOver: true)
+}
