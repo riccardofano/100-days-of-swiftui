@@ -60,3 +60,32 @@ struct Employee2 {
     let name: String
     var vacationRemaining = 10
 }
+
+struct Employee3 {
+    let name: String
+    var vacationAllocated = 14
+    var vacationTaken = 0
+
+    // structs can have computed properties,
+    // they get calculated when you access them with .property
+    var vacationRemaining: Int {
+        vacationAllocated - vacationTaken
+    }
+    
+    // if you want to set computed properties you have to provide a getter and setter
+    // `newValue` is the value you passed in
+    // vacationRemaining2 = 5 <- newValue
+    var vacationRemaining2: Int {
+        get {
+            vacationAllocated - vacationTaken
+        }
+        set {
+            vacationAllocated = vacationTaken + newValue
+        }
+    }
+}
+
+var tommy = Employee3(name: "Tommy")
+print(tommy.vacationRemaining2)
+tommy.vacationRemaining2 += 5
+print(tommy.vacationRemaining2)
