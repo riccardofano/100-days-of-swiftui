@@ -214,3 +214,36 @@ let sortedTeam5 = team.sorted { $0 < $1 }
 print(sortedTeam3)
 print(sortedTeam4)
 print(sortedTeam5)
+
+// to accept functions as parameters you can specify the type of the function you need
+func makeArray(size: Int, using generator: () -> Int) -> [Int] {
+    var numbers = [Int]()
+
+    for _ in 0..<size {
+        let newNumber = generator()
+        numbers.append(newNumber)
+    }
+
+    return numbers
+}
+
+// you can take in more than one function
+func doImportantWork(first: () -> Void, second: () -> Void, third: () -> Void) {
+    print("About to start first work")
+    first()
+    print("About to start second work")
+    second()
+    print("About to start third work")
+    third()
+    print("Done!")
+}
+
+// when calling a function that accepts more than one closure
+// the first is called without a label but the following ones have one
+doImportantWork {
+    print("Do")
+} second: {
+    print("Important")
+} third: {
+    print("work")
+}
