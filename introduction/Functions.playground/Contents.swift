@@ -182,8 +182,9 @@ let sortedTeam1 = team.sorted(by: captainFirstSort)
 
 // or I can write it inline like this:
 // it's not mentioned in the article but you can omit the type information
+// (it was in the following article)
 // because .sorted() already knows what it's expecting to receive
-let sortedTeam2 = team.sorted(by: { (a, b) in
+let sortedTeam2 = team.sorted(by: { a, b in
     switch (a, b) {
     case ("Suzanne", _):
         return true
@@ -195,3 +196,21 @@ let sortedTeam2 = team.sorted(by: { (a, b) in
 })
 print(sortedTeam1)
 print(sortedTeam2)
+
+// if the paramenters of the function you're calling ends with another function
+// you can also omit the parens and the named label
+let sortedTeam3 = team.sorted { a, b in
+    return a < b // omitted logic for brevity
+}
+
+// if you also omit the parameter names swift provides some default ones
+// $ followed by the index of the param
+let sortedTeam4 = team.sorted {
+    return $0 < $1
+}
+
+// if the closure is only one line long you can also omit the return keyword
+let sortedTeam5 = team.sorted { $0 < $1 }
+print(sortedTeam3)
+print(sortedTeam4)
+print(sortedTeam5)
