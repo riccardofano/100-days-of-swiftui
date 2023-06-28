@@ -149,3 +149,49 @@ do {
 }
 
 // TIP: a lot of errors coming from Apple have a description accessible from error.localizedDescription
+
+// functions are first call citizens which means you can assign them to variables, use them as params and return them from functions
+
+// this creates a closure, it has a peculiar syntax
+// everything is wrapped in {} and then comes the function "definition"
+// and the `in` signifies when it ends,
+// it's like the opening brace was the keyword function and the `in` the opening brace
+let sayHello = { (name: String) -> String in
+    "Hi \(name)!"
+}
+
+var greetFunctionType: () -> Void;
+// if assign a function to a variable you don't need to use the argument names when calling it
+// this allows you to create a function or a closure with whatever named parameters you want
+// and still pass it in another function as long as the type signature matches
+
+let team = ["Gloria", "Suzanne", "Piper", "Tiffany", "Tasha"]
+// .sorted() accepts a (String, String) -> Bool closure for example
+// I can write it like this:
+func captainFirstSort(name1: String, name2: String) -> Bool {
+    switch (name1, name2) {
+    case ("Suzanne", _):
+        return true
+    case (_, "Suzanne"):
+        return false
+    default:
+        return name1 < name2
+    }
+}
+let sortedTeam1 = team.sorted(by: captainFirstSort)
+
+// or I can write it inline like this:
+// it's not mentioned in the article but you can omit the type information
+// because .sorted() already knows what it's expecting to receive
+let sortedTeam2 = team.sorted(by: { (a, b) in
+    switch (a, b) {
+    case ("Suzanne", _):
+        return true
+    case (_, "Suzanne"):
+        return false
+    default:
+        return a < b
+    }
+})
+print(sortedTeam1)
+print(sortedTeam2)
