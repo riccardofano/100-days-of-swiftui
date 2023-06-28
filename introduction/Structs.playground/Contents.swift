@@ -133,3 +133,33 @@ struct Player {
         self.number = number
     }
 }
+
+struct BankAccount {
+    // making variables private makes it so you can't directly access it with .variable
+    // now only methods from inside the struct can modify it
+    private var funds = 10000
+    
+    // the access keywords are:
+    // private: don't let anything outside this struct use it
+    // privatefile: don't let anything outside this file use it
+    // private(set): let anyone read it but only the methods are write it
+    // public: let anyone do whatever
+    
+    mutating func deposit(amount: Int) {
+        funds += amount
+    }
+
+    mutating func withdraw(amount: Int) -> Bool {
+        if funds >= amount {
+            funds -= amount
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+// when a property is private you can no longer set it with the default initializer
+let account = BankAccount()
+// this is not allowed with a private funds property
+// account.funds -= 100
