@@ -16,6 +16,7 @@ struct Album {
 
 // creating structs sorta looks like calling a function, we've seen this with arrays before
 // this is syntactic sugar, Swift silently create a method called init() that has all the properties as parameters
+// this is called the memberwise initializer
 let red = Album(title: "Red", artist: "Taylor Swift", releaseYear: 2012)
 let wings = Album.init(title: "Wings", artist: "BTS", releaseYear: 2016)
 
@@ -109,3 +110,26 @@ struct Game {
 
 var game = Game()
 game.score += 10
+
+struct Player {
+    let name: String
+    let number: Int
+
+    // you can create your own initializer like this
+    // note that there's no func keyword before the function
+    // and the return type is always Self (whatever struct you're inside) so you don't need to specify it
+    // all properties must be initialized by the end of the function for this to be valid
+    // once you set a custom init function you lose access to the memberwise one Swift provides by default
+    init(name: String) {
+        // you use `self` to assign a value to the properties
+        // so Swift is not confused between the property name and the parameter name
+        self.name = name
+        self.number = Int.random(in: 1...99)
+    }
+    
+    // you can also overload initializers
+    init(name: String, number: Int) {
+        self.name = name
+        self.number = number
+    }
+}
