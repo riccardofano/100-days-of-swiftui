@@ -29,3 +29,32 @@ let number: Int? = nil
 if let number = number {
     print("the number is \(number)")
 }
+
+// there's an equivalent for Rust's `let else` statement in Swift
+// (which is actually what inspired devs to add it in Rust in the first place)
+// it's `guard let else`
+// this allows you to not have nested optional unwrappings but you must exit the function if you hit the else block
+func square(_ number: Int?) -> Int {
+    guard let number = number else {
+        // you are not allowed to continue with the function once you're inside this block
+        return 0
+    }
+    return number * number
+}
+
+print(square(nil))
+print(square(4))
+
+let arr = [Int]()
+// you can use guard statements even without optionals
+func printArray(arr: [Int]) {
+    guard arr.isEmpty else {
+        return
+    }
+    print(arr)
+}
+
+// you can also unwrap and it will crash the program at runtime if your get a nil value
+let maybeString: String? = nil
+// maybeString.unsafelyUnwrapped()
+
