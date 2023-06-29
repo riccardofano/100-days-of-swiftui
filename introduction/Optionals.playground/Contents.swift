@@ -58,3 +58,11 @@ func printArray(arr: [Int]) {
 let maybeString: String? = nil
 // maybeString.unsafelyUnwrapped()
 
+// Swift has the nullish coalescent operator (??) like in Typescript
+let opposite = opposites["Peach"] ?? "No one"
+print(opposite)
+
+// TIP: when accessing values from dictionaries there's a `default` parameter that does the job instead of ??
+// but ?? works for everything
+let opposite2 = opposites["Peach", default: "No one"]
+print(opposite2)
