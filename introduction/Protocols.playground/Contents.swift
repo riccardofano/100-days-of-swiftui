@@ -72,3 +72,39 @@ getTravelEstimates(using: [car, bike], distance: 150)
 
 // TIP: you can conform to any number of protocols by separating them with a comma
 // struct Car: Vehicle, Convertible {}
+
+// returning `some Protocol` means I want to return something that complies to the protocol
+// but that Swift should figure out the actual type as opposed to it being an abstract object
+func getRandomNumber() -> some Equatable {
+    Int.random(in: 1...10)
+}
+
+func getRandomBool() -> some Equatable {
+    Bool.random()
+}
+
+// so you can't compare the return types of a function that returns
+// an Int as its `some Equatable` and one that returns a Bool as its `some Equatable`
+
+// Error: cannot convert value of type 'some Equatable' from getRandomBool() to 'some Equatable' from getRandomNumber()
+// print(getRandomBool() == getRandomNumber())
+
+// but if you compare two calls from the same function it will work
+print(getRandomBool() == getRandomBool())
+
+// but you can return a protocol and store it in an array for example
+func getRandomVehicle() -> Vehicle {
+    if Bool.random() {
+        return Car()
+    } else {
+        return Bicycle()
+    }
+}
+
+var arr = [Vehicle]()
+arr.append(getRandomVehicle())
+arr.append(getRandomVehicle())
+arr.append(getRandomVehicle())
+arr.append(getRandomVehicle())
+arr.append(getRandomVehicle())
+print(arr)
