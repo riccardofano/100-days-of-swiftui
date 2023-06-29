@@ -108,3 +108,39 @@ arr.append(getRandomVehicle())
 arr.append(getRandomVehicle())
 arr.append(getRandomVehicle())
 print(arr)
+
+// you can add functionality to types by using the extension keyword
+// the types don't even have to be your own, here we are the modifying the default String type
+
+// Kinda like Rust's impl which are separate from the struct/enum body
+// but there you can't extend a type itself that isn't your own you need to create a trait and impl that for the type
+extension String {
+    func trimmed() -> String {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    // you can also have mutating methods
+    mutating func trim() {
+        self = self.trimmed()
+    }
+    
+    // you can also add computed properties
+    var lines: [String] {
+        self.components(separatedBy: .newlines)
+    }
+}
+
+// TIP: if you add your init function in an extension Swift don't remove the memberwise init it provides by default
+struct Book {
+    let name: String
+    let pageCount: Int
+    let readingHours: Int
+}
+
+extension Book {
+    init(name: String, pageCount: Int) {
+        self.name = name
+        self.pageCount = pageCount
+        self.readingHours = pageCount / 50
+    }
+}
