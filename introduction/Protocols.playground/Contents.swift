@@ -144,3 +144,12 @@ extension Book {
         self.readingHours = pageCount / 50
     }
 }
+
+// you can extend protocols too
+// extending protocols allows you create a default implementation for that protocol
+// types can still override it if needed
+extension Collection {
+    var isNotEmpty: Bool {
+        isEmpty == false
+    }
+}
