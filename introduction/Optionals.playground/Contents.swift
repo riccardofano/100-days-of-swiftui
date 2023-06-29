@@ -77,3 +77,17 @@ var book: Book? = nil
 // it short circuits the expresion to nil if anything is nil
 let author = book?.author?.first?.uppercased() ?? "A"
 print(author)
+
+enum UserError: Error {
+    case badID, networkFailed
+}
+
+func getUser(id: Int) throws -> String {
+    throw UserError.networkFailed
+}
+
+// the `try?` operator turns an error into an optional
+// it's like the .ok() method on Result types in Rust
+if let user = try? getUser(id: 23) {
+    print("User: \(user)")
+}
