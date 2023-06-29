@@ -66,3 +66,14 @@ print(opposite)
 // but ?? works for everything
 let opposite2 = opposites["Peach", default: "No one"]
 print(opposite2)
+
+struct Book {
+    let title: String
+    let author: String?
+}
+
+var book: Book? = nil
+// ? is the optional chaining operator
+// it short circuits the expresion to nil if anything is nil
+let author = book?.author?.first?.uppercased() ?? "A"
+print(author)
