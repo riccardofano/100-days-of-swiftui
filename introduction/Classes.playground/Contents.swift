@@ -82,3 +82,22 @@ final class Student {
 // if a class is marked with `final` it can't be used to inherit from
 // but it can inherit from other classes
 // class ArtStudent: Student { }
+
+class Vehicle {
+    let isElectric: Bool
+
+    init(isElectric: Bool) {
+        self.isElectric = isElectric
+    }
+}
+
+class Car: Vehicle {
+    let isConvertible: Bool
+
+    init(isConvertible: Bool, isElectric: Bool) {
+        self.isConvertible = isConvertible
+        // have to call super.init() *after* you initialized your own variables
+        // can't do it before it seems
+        super.init(isElectric: isElectric)
+    }
+}
