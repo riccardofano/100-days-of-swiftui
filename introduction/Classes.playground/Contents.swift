@@ -38,3 +38,47 @@ let gameClass3 = GameClass(score: 20, isOver: false)
 print(gameClass3.score)
 gameClass3.score += 5
 print(gameClass3.score)
+
+class Employee {
+    let hours: Int
+
+    init(hours: Int) {
+        self.hours = hours
+    }
+    func printSummary() {
+        print("I work \(hours) hours a day.")
+    }
+}
+
+// to inherit from another class you put that class name following a colon
+class Developer: Employee {
+    func work() {
+        // now this class also has access to the hours variable from the super class
+        print("I'm writing code for \(hours) hours.")
+    }
+    
+    // you can override a super class' methods with the override keyword
+    // if your method has the same name as a super's method but accepts different params you don't need the override keyword
+    override func printSummary() {
+        print("I'm a developer who will sometimes work \(hours) hours a day, but other times spend hours arguing about whether code should be indented using tabs or spaces.")
+    }
+}
+
+class Manager: Employee {
+    func work() {
+        print("I'm going to meetings for \(hours) hours.")
+    }
+}
+
+let bobby = Manager(hours: 10)
+// subclasses can access both variables and methods from the super class
+print(bobby.hours)
+bobby.printSummary()
+
+final class Student {
+    var classes = 10
+}
+
+// if a class is marked with `final` it can't be used to inherit from
+// but it can inherit from other classes
+// class ArtStudent: Student { }
