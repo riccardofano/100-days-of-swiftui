@@ -101,3 +101,23 @@ class Car: Vehicle {
         super.init(isElectric: isElectric)
     }
 }
+
+class User {
+    let id: Int
+
+    init(id: Int) {
+        self.id = id
+        print("User \(id): I'm alive!")
+    }
+
+    // deinit will be called when the last reference of a class is destroyed (which usually happens when they fall out of scope)
+    // it can't receive any parameters or return anything
+    deinit {
+        print("User \(id): I'm dead!")
+    }
+}
+
+for i in 1...3 {
+    let user = User(id: i)
+    print("User \(user.id): I'm in control!")
+}
