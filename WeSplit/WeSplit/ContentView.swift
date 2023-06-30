@@ -12,14 +12,10 @@ struct ContentView: View {
         Form {
             // You can only have 10 sibling elements
             // so if you want to have more than that you can group them
-            Group {
-                Text("Hello world")
-                Text("Hello world")
-                Text("Hello world")
-                Text("Hello world")
+            Section {
                 Text("Hello world")
             }
-            Group {
+            Section {
                 Text("Hello world")
                 Text("Hello world")
                 Text("Hello world")
