@@ -13,6 +13,7 @@ struct ContentView: View {
     // From the wording in the article it seems SwiftUI is creating a new struct every time a property changes kinda like in React where the whole component reruns every time
     // adding private is recommened with @State properties because they should only be accessed inside the same struct
     @State private var tapCount = 0
+    @State private var name = ""
     
     var body: some View {
         NavigationView {
@@ -29,9 +30,17 @@ struct ContentView: View {
                     Text("Hello world")
                     Text("Hello world")
                 }
+                Section {
+                    // $ makes a variable a 2 way binding
+                    // I think this basically means "this function (TextField) is also allowed to modify `name`"
+                    // othewise only I can modify it like we've seen with tapCount
+                    TextField("Enter your name", text: $name)
+                    Text("Your name is \(name)")
+                }
                 // you specify the onClick event as a trailing closure
                 Button("This button has been pressed \(tapCount) times.") {
                     tapCount += 1
+                    name += "A"
                 }
             }
             .navigationTitle("SwiftUI")
