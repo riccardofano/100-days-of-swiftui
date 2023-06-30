@@ -24,12 +24,27 @@ struct ContentView: View {
                     // in the article this wants to create another page when you click on it
                     // it only works if this is inside a NavigationView (which is why we added it)
                     // BUT for me it's creating a popup and it didn't need a NavigationView to work, must be an iOS version difference
+                    // adding .pickerStyle(.navigationLink) made it like in the article
                     Picker("Number of people", selection: $numberOfPeople) {
                         ForEach(2..<100) {
                             Text("\($0) people")
                         }
                     }
+                    .pickerStyle(.navigationLink)
                 }
+                
+                Section {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(tipPercentages, id: \.self) {
+                            Text($0, format: .percent)
+                        }
+                    }
+                    // differently from the .navigationTitle this is applied to the Picker directly
+                    .pickerStyle(.segmented)
+                } header: {
+                    Text("How much do you want to tip?")
+                }
+                
                 Section {
                     Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
                 }
