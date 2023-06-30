@@ -9,18 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     let tipPercentages = [10, 15, 20, 25, 0]
+    let currencyFormat: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "EUR")
 
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
     
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+    var grandTotal: Double {
         let tipSelection = Double(tipPercentage)
         
         let tipValue = checkAmount / 100 * tipSelection
-        let grandTotal = checkAmount + tipValue
+        return checkAmount + tipValue
+    }
+    
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
         return grandTotal / peopleCount
     }
 
@@ -28,7 +32,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField( "Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "EUR") )
+                    TextField( "Amount", value: $checkAmount, format: currencyFormat )
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     
@@ -46,18 +50,26 @@ struct ContentView: View {
                 
                 Section {
                     Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
                     // differently from the .navigationTitle this is applied to the Picker directly
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.wheel)
                 } header: {
                     Text("How much do you want to tip?")
                 }
                 
                 Section {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
+                    Text(totalPerPerson, format: currencyFormat)
+                } header: {
+                    Text("Amount per person")
+                }
+
+                Section {
+                    Text(grandTotal, format: currencyFormat)
+                } header: {
+                    Text("Grand total")
                 }
             }
             // it seems counter intuitive but the navigation title is applied to the first child of the NavigationView
