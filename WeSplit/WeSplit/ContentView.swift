@@ -15,20 +15,28 @@ struct ContentView: View {
     @State private var tapCount = 0
     @State private var name = ""
     
+    let students = ["Harry", "Hermione", "Ron"]
+    @State private var selectedStudent = "Ron"
+    
     var body: some View {
         NavigationView {
             Form {
                 // You can only have 10 sibling elements
                 // so if you want to have more than that you can group them
                 Section {
-                    Text("Hello world")
-                }
-                Section {
-                    Text("Hello world")
-                    Text("Hello world")
-                    Text("Hello world")
-                    Text("Hello world")
-                    Text("Hello world")
+                    // You have to use ..< instead of ... ranges (will have to figure out why in another time)
+                    // ForEach is not restricted by the 10 siblings constraint
+                    // ForEach(1..<100) {
+                        // Text("Row: \($0)")
+                    // }
+                    Picker("Select your student", selection: $selectedStudent) {
+                        // ForEach needs an id to indentify the rows uniquely
+                        // it's like React's keys
+                        // NOTE: This doesn't update in the preview but works when the app is built
+                        ForEach(students, id: \.self) {
+                            Text($0)
+                        }
+                    }
                 }
                 Section {
                     // $ makes a variable a 2 way binding
