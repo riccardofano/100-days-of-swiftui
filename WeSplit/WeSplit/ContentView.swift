@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    // Mutating a value inside a computed variable in a struct is not allowed
+    // @State allows that value to be stored separately by SwiftUI in a place that can be modified
+    // From the wording in the article it seems SwiftUI is creating a new struct every time a property changes kinda like in React where the whole component reruns every time
+    // adding private is recommened with @State properties because they should only be accessed inside the same struct
+    @State private var tapCount = 0
+    
     var body: some View {
         NavigationView {
             Form {
@@ -22,6 +28,10 @@ struct ContentView: View {
                     Text("Hello world")
                     Text("Hello world")
                     Text("Hello world")
+                }
+                // you specify the onClick event as a trailing closure
+                Button("This button has been pressed \(tapCount) times.") {
+                    tapCount += 1
                 }
             }
             .navigationTitle("SwiftUI")
