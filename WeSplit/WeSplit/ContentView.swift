@@ -9,13 +9,24 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Form {
+            // You can only have 10 sibling elements
+            // so if you want to have more than that you can group them
+            Group {
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+            }
+            Group {
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+                Text("Hello world")
+            }
         }
-        .padding()
     }
 }
 
