@@ -62,33 +62,41 @@ struct ContentView: View {
         numberFormatStyle: .number
     )
     
-    var convertedDegrees: Double {
+    private var convertedDegrees: Double {
         convertFrom.convert(degrees, to: convertTo)
     }
 
     var body: some View {
-        Form {
-            Section {
-                TextField("Degrees", value: $degrees, format: .number)
-                
-                Picker("Convert from", selection: $convertFrom) {
-                    ForEach(temperatureUnits, id: \.self) {
-                        Text($0.name)
+        NavigationView {
+            Form {
+                Section {
+                    HStack {
+                        Text("Degrees: ")
+                        TextField("Degrees", value: $degrees, format: .number)
+                            .keyboardType(.decimalPad)
+                    }
+
+                    Picker("Convert from", selection: $convertFrom) {
+                        ForEach(temperatureUnits, id: \.self) {
+                            Text($0.name)
+                        }
+                    }
+
+                    Picker("Convert to", selection: $convertTo) {
+                        ForEach(temperatureUnits, id: \.self) {
+                            Text($0.name)
+                        }
                     }
                 }
 
-                Picker("Convert to", selection: $convertTo) {
-                    ForEach(temperatureUnits, id: \.self) {
-                        Text($0.name)
-                    }
+                Section {
+                    Text("\(convertedDegrees.formatted())\(convertTo.symbol)")
+                } header: {
+                    Text("Result")
                 }
             }
-            
-            Section {
-                Text("\(convertedDegrees.formatted())\(convertTo.symbol)")
-            } header: {
-                Text("Result")
-            }
+            .navigationTitle("Temperature converter")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
