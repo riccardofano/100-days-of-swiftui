@@ -8,18 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    // having 2 children as the top level elements of the body creates 2 screens
+    @State private var showingAlert = false
+    
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(stops: [
-                .init(color: .white, location: 0.45),
-                .init(color: .black, location: 0.55),
-            ]), startPoint: .top, endPoint: .bottom)
-            
-            RadialGradient(gradient: Gradient(colors: [.blue, .black.opacity(0.1)]), center: .center, startRadius: 20, endRadius: 200)
-            AngularGradient(gradient: Gradient(colors: [.red, .yellow, .green, .blue, .purple, .red]), center: .center).opacity(0.5)
+        VStack(spacing: 50) {
+            Button("Show alert") {
+                showingAlert = true
+            }.alert("I'm an alert", isPresented: $showingAlert) {
+                Button("Ok") {}
+            } message: {
+                Text("I know you're not going to read this")
+            }
+            Button {
+               print("You fool!")
+            } label: {
+                Label("Don't press this", systemImage: "xmark.circle.fill")
+            }
+            .padding()
+            .foregroundColor(.white)
+            .background(.red)
+            .cornerRadius(.infinity)
         }
-        
     }
 }
 
