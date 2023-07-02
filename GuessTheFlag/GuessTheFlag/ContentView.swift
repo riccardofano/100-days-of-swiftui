@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    // having 2 children as the top level elements of the body creates 2 screens
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
+        // this in css would be
+        // flex coloumn
+        VStack(alignment: .leading, spacing: 50) {
+            Text("Hello longer thing")
+            Text("World")
+        }.background(.red)
+        // flex row
+        HStack(spacing: 20) {
             Text("Hello, world!")
+            Text("This is inside a stack")
         }
-        .padding()
+        // position absolute
+        // or grid in the same cell
+        ZStack() {
+            // Color.red.frame(width: 200, height: 100)
+            Color.red
+            Text("Hello, world!")
+            Text("This is inside a stack")
+        }.ignoresSafeArea()
     }
 }
 
