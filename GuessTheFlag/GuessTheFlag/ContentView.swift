@@ -52,6 +52,8 @@ struct ContentView: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
+                        Button("Restart game", action: resetGame)
+                            .buttonStyle(.borderedProminent)
                     } else {
                         VStack {
                             Text("Tap the flag of")
@@ -115,6 +117,13 @@ struct ContentView: View {
         }
         showingScore = true
         answerCount += 1
+    }
+    
+    func resetGame() {
+        showingFinalScore = false
+        score = 0
+        answerCount = 0
+        askQuestion()
     }
 }
 
