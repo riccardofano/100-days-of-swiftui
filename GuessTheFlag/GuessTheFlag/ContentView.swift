@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let totalQuestions = 8;
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]
     @State private var correctAnswer = Int.random(in: 0...2)
     
     @State private var showingScore = false
+    @State private var showingFinalScore = false
     @State private var score = 0
     @State private var scoreTitle = ""
+    @State private var answerCount = 0
     
     var body: some View {
         ZStack {
@@ -29,28 +32,50 @@ struct ContentView: View {
                     .foregroundColor(.white)
                 
                 VStack(spacing: 15) {
-                    VStack {
-                        Text("Tap the flag of")
-                            .font(.subheadline.weight(.heavy))
-                            .foregroundStyle(.secondary)
-                        Text(countries[correctAnswer])
-                            .font(.largeTitle.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    ForEach(0..<3) { number in
-                        Button {
-                            flagTapped(index: number)
-                        } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .shadow(radius: 4)
+                    if showingFinalScore {
+                        VStack(spacing: 20) {
+                            Text("The game is over, you correctly guessed")
+                                .font(.subheadline.weight(.heavy))
+                                .foregroundStyle(.secondary)
+                            HStack(alignment: .firstTextBaseline) {
+                                Text("\(score)")
+                                    .font(.largeTitle.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                                Text("out of")
+                                    .font(.subheadline.weight(.heavy))
+                                    .foregroundStyle(.secondary)
+                                Text("\(totalQuestions)")
+                                    .font(.largeTitle.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                                Text("questions!")
+                                    .font(.subheadline.weight(.heavy))
+                                    .foregroundStyle(.secondary)
+                            }
                         }
-                        .alert(scoreTitle, isPresented: $showingScore) {
-                            Button("Continue", action: askQuestion)
-                        } message: {
-                            Text("Score is \(score)")
+                    } else {
+                        VStack {
+                            Text("Tap the flag of")
+                                .font(.subheadline.weight(.heavy))
+                                .foregroundStyle(.secondary)
+                            Text(countries[correctAnswer])
+                                .font(.largeTitle.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        ForEach(0..<3) { number in
+                            Button {
+                                flagTapped(index: number)
+                            } label: {
+                                Image(countries[number])
+                                    .renderingMode(.original)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .shadow(radius: 4)
+                            }
+                            .alert(scoreTitle, isPresented: $showingScore) {
+                                Button("Continue", action: askQuestion)
+                            } message: {
+                                Text("Score is \(score)")
+                            }
                         }
                     }
                 }
@@ -61,18 +86,24 @@ struct ContentView: View {
                 
                 Spacer()
                 Spacer()
-                Text("Score: \(score)")
-                    .foregroundColor(.white)
-                    .font(.title.bold())
-                Spacer()
+                if !showingFinalScore {
+                    Text("Score: \(score)")
+                        .foregroundColor(.white)
+                        .font(.title.bold())
+                    Spacer()
+                }
             }
             .padding()
         }
     }
     
     func askQuestion() {
-        countries.shuffle()
-        correctAnswer = Int.random(in: 0...2)
+        if (answerCount == totalQuestions) {
+            showingFinalScore = true
+        } else {
+            countries.shuffle()
+            correctAnswer = Int.random(in: 0...2)
+        }
     }
     
     func flagTapped(index: Int) {
@@ -83,6 +114,7 @@ struct ContentView: View {
             scoreTitle = "Wrong, that's the flag of \(countries[correctAnswer])"
         }
         showingScore = true
+        answerCount += 1
     }
 }
 
