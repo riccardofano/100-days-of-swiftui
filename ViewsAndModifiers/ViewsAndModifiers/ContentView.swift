@@ -12,30 +12,25 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Button("Hello World") {
-                useRedBackground.toggle()
+            VStack {
+                Text("Gryffindor")
+                    .font(.footnote)
+                Text("Hufflepuff")
+                Text("Ravenclaw")
+                Text("Slytherin")
             }
-            .padding()
-            .foregroundColor(.white)
-            .background(useRedBackground ? .red : .blue)
+            .font(.title)
             
-            // using the if version is less efficient because it creates 2 separate views
-            // instead of just changing one modifier
-            if useRedBackground {
-                Button("Hello World") {
-                    useRedBackground.toggle()
-                }
-                .padding()
-                .foregroundColor(.white)
-                .background(.red)
-            } else {
-                Button("Hello World") {
-                    useRedBackground.toggle()
-                }
-                .padding()
-                .foregroundColor(.white)
-                .background(.blue)
+            VStack {
+                Text("Gryffindor")
+                    // you can't undo a blur
+                    // because it's not an "environmental modifier" <- not actually a real thing, just a way to think about them
+                    .blur(radius: 0)
+                Text("Hufflepuff")
+                Text("Ravenclaw")
+                Text("Slytherin")
             }
+            .blur(radius: 5)
         }
     }}
 
