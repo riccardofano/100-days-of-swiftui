@@ -12,7 +12,22 @@ struct ContentView: View {
         GridStack(rows: 5, columns: 3) { row, column in
             Image(systemName: "\(row * 3 + column).circle")
             Text("\(row)\(column)")
+                .blueTitle()
         }
+    }
+}
+
+struct BlueTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+}
+
+extension View {
+    func blueTitle() -> some View {
+        modifier(BlueTitle())
     }
 }
 
