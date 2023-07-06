@@ -64,14 +64,11 @@ struct ContentView: View {
                                 .foregroundStyle(.secondary)
                         }
                         
-                        ForEach(0..<3) { number in
+                        ForEach(0..<3) { index in
                             Button {
-                                flagTapped(index: number)
+                                flagTapped(index: index)
                             } label: {
-                                Image(countries[number])
-                                    .renderingMode(.original)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .shadow(radius: 4)
+                                FlagImage(name: countries[index])
                             }
                             .alert(scoreTitle, isPresented: $showingScore) {
                                 Button("Continue", action: askQuestion)
@@ -124,6 +121,17 @@ struct ContentView: View {
         score = 0
         answerCount = 0
         askQuestion()
+    }
+}
+
+struct FlagImage: View {
+    let name: String
+    
+    var body: some View {
+        Image(name)
+            .renderingMode(.original)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .shadow(radius: 4)
     }
 }
 
