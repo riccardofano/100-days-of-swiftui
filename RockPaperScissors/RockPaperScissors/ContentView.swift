@@ -59,6 +59,10 @@ struct ContentView: View {
     @State private var moveToBeat = Int.random(in: 0..<3)
     @State private var resultToAchieve = Int.random(in: 0..<2)
     
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var showingAnswer = false
+    
     var correctAnswer: Move {
         possibleMoves[moveToBeat].correctMove(toAchieve: results[resultToAchieve])
     }
@@ -75,13 +79,29 @@ struct ContentView: View {
             HStack {
                 ForEach(possibleMoves, id: \.self) { move in
                     Button {
-                        print(move == correctAnswer)
+                        handleAnswer(move: move)
                     } label: {
                         Text(move.description)
+                    }
+                    .alert(alertTitle, isPresented: $showingAnswer) {
+                        Button("Continue", action: newQuestion)
+                    } message: {
+                        Text(alertMessage)
                     }
                 }
             }
         }
+    }
+    
+    func newQuestion() {
+        moveToBeat = Int.random(in: 0..<3)
+        resultToAchieve = Int.random(in: 0..<2)
+    }
+    
+    func handleAnswer(move: Move) {
+        alertTitle = move == correctAnswer ? "Correct" : "Wrong"
+        alertMessage = "The correct answer was \(correctAnswer.description)"
+        showingAnswer = true
     }
 }
 
