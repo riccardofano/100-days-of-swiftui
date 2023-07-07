@@ -59,7 +59,7 @@ struct ContentView: View {
     @State private var moveToBeat = Int.random(in: 0..<3)
     @State private var resultToAchieve = Int.random(in: 0..<2)
     
-    let totalQuestions = 2
+    let totalQuestions = 10
     @State private var answers = 0
     @State private var score = 0
     @State private var isGameOver = false
@@ -124,8 +124,10 @@ struct ContentView: View {
         } else {
             alertTitle = "Wrong"
             alertMessage = "The correct answer was \(correctAnswer.description)\n"
+            if score > 1 {
+                score -= 1
+            }
         }
-        
         alertMessage += "Now your score is \(score)"
         showingAnswer = true
         answers += 1
