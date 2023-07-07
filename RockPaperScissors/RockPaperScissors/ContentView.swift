@@ -73,21 +73,24 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 40) {
             VStack {
                 Text("What is should you pick to achieve a")
                 Text(results[resultToAchieve].description)
+                    .font(.largeTitle)
                 Text("against the all mighty")
                 Text(possibleMoves[moveToBeat].description)
+                    .font(.largeTitle)
             }
             
-            HStack {
+            HStack(spacing: 10) {
                 ForEach(possibleMoves, id: \.self) { move in
                     Button {
                         handleAnswer(move: move)
                     } label: {
                         Text(move.description)
                     }
+                    .buttonStyle(.borderedProminent)
                     .alert(alertTitle, isPresented: $showingAnswer) {
                         Button("Continue") {
                             newQuestion()
