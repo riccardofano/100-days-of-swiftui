@@ -59,6 +59,10 @@ struct ContentView: View {
     @State private var moveToBeat = Int.random(in: 0..<3)
     @State private var resultToAchieve = Int.random(in: 0..<2)
     
+    let totalQuestions = 10
+    @State private var answers = 0
+    @State private var score = 0
+    
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     @State private var showingAnswer = false
@@ -84,7 +88,9 @@ struct ContentView: View {
                         Text(move.description)
                     }
                     .alert(alertTitle, isPresented: $showingAnswer) {
-                        Button("Continue", action: newQuestion)
+                        Button("Continue") {
+                            newQuestion()
+                        }
                     } message: {
                         Text(alertMessage)
                     }
@@ -99,9 +105,18 @@ struct ContentView: View {
     }
     
     func handleAnswer(move: Move) {
-        alertTitle = move == correctAnswer ? "Correct" : "Wrong"
-        alertMessage = "The correct answer was \(correctAnswer.description)"
+        if move == correctAnswer {
+            alertTitle = "You are Correct"
+            score += 1
+            alertMessage = ""
+        } else {
+            alertTitle = "Wrong"
+            alertMessage = "The correct answer was \(correctAnswer.description)\n"
+        }
+        
+        alertMessage += "Now your score is \(score)"
         showingAnswer = true
+        answers += 1
     }
 }
 
