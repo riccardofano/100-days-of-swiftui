@@ -59,9 +59,10 @@ struct ContentView: View {
     @State private var moveToBeat = Int.random(in: 0..<3)
     @State private var resultToAchieve = Int.random(in: 0..<2)
     
-    let totalQuestions = 10
+    let totalQuestions = 2
     @State private var answers = 0
     @State private var score = 0
+    @State private var isGameOver = false
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -90,9 +91,13 @@ struct ContentView: View {
                     .alert(alertTitle, isPresented: $showingAnswer) {
                         Button("Continue") {
                             newQuestion()
-                        }
-                    } message: {
+                        }                    } message: {
                         Text(alertMessage)
+                    }
+                    .alert("The game is over", isPresented: $isGameOver) {
+                        Button("Restart", action: resetGame)
+                    } message: {
+                        Text("You scored \(score) points out of \(totalQuestions)")
                     }
                 }
             }
@@ -100,8 +105,12 @@ struct ContentView: View {
     }
     
     func newQuestion() {
-        moveToBeat = Int.random(in: 0..<3)
-        resultToAchieve = Int.random(in: 0..<2)
+        if answers == totalQuestions {
+            isGameOver = true
+        } else {
+            moveToBeat = Int.random(in: 0..<3)
+            resultToAchieve = Int.random(in: 0..<2)
+        }
     }
     
     func handleAnswer(move: Move) {
@@ -117,6 +126,12 @@ struct ContentView: View {
         alertMessage += "Now your score is \(score)"
         showingAnswer = true
         answers += 1
+    }
+    
+    func resetGame() {
+        score = 0
+        answers = 0
+        newQuestion()
     }
 }
 
