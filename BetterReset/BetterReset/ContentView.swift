@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var hoursOfSleep = 8.0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Form {
+            Stepper("\(hoursOfSleep.formatted()) hours", value: $hoursOfSleep, in: 2...12, step: 0.25)
         }
-        .padding()
     }
 }
 
