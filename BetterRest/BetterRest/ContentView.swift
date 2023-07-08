@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  BetterReset
+//  BetterRest
 //
 //  Created by Riccardo Fano on 2023-07-08.
 //
