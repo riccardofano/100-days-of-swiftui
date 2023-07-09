@@ -40,11 +40,11 @@ struct ContentView: View {
                     Text("Desired amount of sleep")
                 }
                 
-                Section {
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
-                } header: {
-                    Text("Daily coffee intake")
-                }
+                Picker("Daily coffee intake", selection: $coffeeAmount) {
+                    ForEach(1..<21) { cup in
+                        Text(cup == 1 ? "1 cup" : "\(cup) cups")
+                    }
+                }.pickerStyle(.wheel)
             }
             .navigationTitle("BetterRest")
             .toolbar {
