@@ -10,12 +10,24 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            List {
+                Section("First Section") {
+                    Text("static row")
+                    ForEach(0..<5) {
+                        Text("Row \($0 + 1)")
+                    }
+                }
+                
+                Section("Second Section") {
+                    Text("static row")
+                    Text("static row")
+                }
+            }.listStyle(.sidebar)
+            
+            List(0..<5) {
+                Text("Dynamic row \($0)")
+            }
         }
-        .padding()
     }
 }
 
