@@ -27,24 +27,23 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             Form {
-                HStack() {
-                    Text("When do you want to wake up?")
-                        .font(.headline)
-                    Spacer()
+                Section {
                     DatePicker("Please enter a date", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
+                } header: {
+                    Text("When do you want to wake up?")
                 }
                 
-                VStack {
-                    Text("Desired amount of sleep")
-                        .font(.headline)
+                Section {
                     Stepper("\(hoursOfSleep.formatted()) hours", value: $hoursOfSleep, in: 2...12, step: 0.25)
+                } header: {
+                    Text("Desired amount of sleep")
                 }
                 
-                VStack {
-                    Text("Daily coffee intake")
-                        .font(.headline)
+                Section {
                     Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                } header: {
+                    Text("Daily coffee intake")
                 }
             }
             .navigationTitle("BetterRest")
