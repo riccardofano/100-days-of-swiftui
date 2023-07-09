@@ -9,7 +9,14 @@ import SwiftUI
 import CoreML
 
 struct ContentView: View {
-    @State private var wakeUp = Date.now
+    static var defaultWakeTime: Date {
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? Date.now
+    }
+    
+    @State private var wakeUp = defaultWakeTime
     @State private var hoursOfSleep = 8.0
     @State private var coffeeAmount = 1
     
@@ -19,19 +26,26 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Text("When do you want to wake up?")
-                    .font(.headline)
-                DatePicker("Please enter a date", selection: $wakeUp, displayedComponents: .hourAndMinute)
-                    .labelsHidden()
+            Form {
+                HStack() {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                    Spacer()
+                    DatePicker("Please enter a date", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
                 
-                Text("Desired amount of sleep")
-                    .font(.headline)
-                Stepper("\(hoursOfSleep.formatted()) hours", value: $hoursOfSleep, in: 2...12, step: 0.25)
+                VStack {
+                    Text("Desired amount of sleep")
+                        .font(.headline)
+                    Stepper("\(hoursOfSleep.formatted()) hours", value: $hoursOfSleep, in: 2...12, step: 0.25)
+                }
                 
-                Text("Daily coffee intake")
-                    .font(.headline)
-                Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                VStack {
+                    Text("Daily coffee intake")
+                        .font(.headline)
+                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1...20)
+                }
             }
             .navigationTitle("BetterRest")
             .toolbar {
