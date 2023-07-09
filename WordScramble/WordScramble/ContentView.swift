@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var word = ""
+    
+    var wordIsMisspelled: String {
+        isWordMisspelled(word: word) ? "Misspelled" : "Correct"
+    }
+    
     var body: some View {
         VStack {
+            Section {
+                TextField("Check if your word is misspelled", text: $word)
+                Text(wordIsMisspelled)
+            }
+            .padding()
+            
             List {
                 Section("First Section") {
                     Text("static row")
@@ -27,7 +39,16 @@ struct ContentView: View {
             List(0..<5) {
                 Text("Dynamic row \($0)")
             }
+            
         }
+    }
+    
+    func isWordMisspelled(word: String) -> Bool {
+        let checker = UITextChecker()
+        let range = NSRange(location: 0, length: word.utf16.count)
+        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        
+        return misspelledRange.location != NSNotFound
     }
     
     func loadFile() {
