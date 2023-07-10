@@ -8,55 +8,44 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var word = ""
-    
-    var wordIsMisspelled: String {
-        isWordMisspelled(word: word) ? "Misspelled" : "Correct"
-    }
+    @State private var usedWords: [String] = []
+    @State private var rootWord = ""
+    @State private var newWord = ""
     
     var body: some View {
-        VStack {
-            Section {
-                TextField("Check if your word is misspelled", text: $word)
-                Text(wordIsMisspelled)
-            }
-            .padding()
-            
+        NavigationView {
             List {
-                Section("First Section") {
-                    Text("static row")
-                    ForEach(0..<5) {
-                        Text("Row \($0 + 1)")
-                    }
+                Section {
+                    TextField("Enter your word", text: $newWord)
+                        .textInputAutocapitalization(.never)
                 }
                 
-                Section("Second Section") {
-                    Text("static row")
-                    Text("static row")
+                Section {
+                    ForEach(usedWords, id: \.self) { word in
+                        HStack {
+                            Image(systemName: "\(word.count).circle")
+                            Text(word)
+                        }
+                    }
                 }
-            }.listStyle(.sidebar)
-            
-            List(0..<5) {
-                Text("Dynamic row \($0)")
             }
-            
+            .navigationTitle(rootWord)
+            .onSubmit { addWord() }
         }
     }
     
-    func isWordMisspelled(word: String) -> Bool {
-        let checker = UITextChecker()
-        let range = NSRange(location: 0, length: word.utf16.count)
-        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+    func addWord() {
+        let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        return misspelledRange.location != NSNotFound
-    }
-    
-    func loadFile() {
-        if let fileURL = Bundle.main.url(forResource: "some-file", withExtension: "txt") {
-            if let fileContents = try? String(contentsOf: fileURL) {
-               print(fileContents)
-            }
+        guard answer.count > 0 else {
+            return
         }
+        
+        // Ok this is really cool
+        withAnimation {
+            usedWords.insert(answer, at: 0)
+        }
+        newWord = ""
     }
 }
 
