@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var allWords: [String] = []
+    
     @State private var usedWords: [String] = []
     @State private var rootWord = ""
     @State private var newWord = ""
@@ -34,6 +36,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle(rootWord)
+            .toolbar {
+                Button("New word", action: restartGame)
+            }
             .onSubmit { addWord() }
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
@@ -53,8 +58,14 @@ struct ContentView: View {
             fatalError("Could not read the contents of start.txt")
         }
         
-        let allWords = startWords.components(separatedBy: .newlines)
+        allWords = startWords.components(separatedBy: .newlines)
+        restartGame()
+    }
+    
+    func restartGame() {
         rootWord = allWords.randomElement() ?? "silkworm"
+        usedWords = []
+        newWord = ""
     }
     
     func addWord() {
