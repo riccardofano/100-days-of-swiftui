@@ -18,6 +18,14 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    var score: Int {
+        var sum = 0
+        for word in usedWords {
+            sum += word.count
+        }
+        return sum
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -27,6 +35,8 @@ struct ContentView: View {
                 }
                 
                 Section {
+                    Text("Score: \(score)")
+                        .font(.headline)
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle")
