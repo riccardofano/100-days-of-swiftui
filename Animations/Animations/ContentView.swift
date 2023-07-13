@@ -7,19 +7,50 @@
 
 import SwiftUI
 
+//struct ContentView: View {
+//    @State private var dragAmount = CGSize.zero;
+//
+//    var body: some View {
+//        LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//            .frame(width: 300, height: 200)
+//            .clipShape(RoundedRectangle(cornerRadius: 10))
+//            .offset(dragAmount)
+//            .gesture(
+//                DragGesture()
+//                    .onChanged { dragAmount = $0.translation }
+//                    .onEnded { _ in
+//                        withAnimation(.spring()) {
+//                            dragAmount = .zero
+//                        }
+//                    }
+//            )
+//    }
+//}
+
 struct ContentView: View {
-    @State private var enabled = true;
+    let letters = Array("Hello SwiftUI")
+    @State private var enabled = false
+    @State private var dragAmount = CGSize.zero
     
     var body: some View {
-        Button("Tap me") {
-            enabled.toggle()
+        HStack(spacing: 0) {
+            ForEach(0..<letters.count, id: \.self) { num in
+                Text(String(letters[num]))
+                    .padding(5)
+                    .font(.title)
+                    .background(enabled ? .blue : .red)
+                    .offset(dragAmount)
+                    .animation(.default.delay(Double(num) / 20), value: dragAmount)
+            }
         }
-        .frame(width: 100, height: 100)
-        .foregroundColor(.white)
-        .background(enabled ? .red : .blue)
-        .animation(nil, value: enabled)
-        .clipShape(RoundedRectangle(cornerRadius: enabled ? 50 : 0))
-        .animation(.interpolatingSpring(stiffness: 10, damping: 1), value: enabled)
+        .gesture(
+            DragGesture()
+                .onChanged { dragAmount = $0.translation }
+                .onEnded { _ in
+                    dragAmount = .zero
+                    enabled.toggle()
+                }
+        )
     }
 }
 
