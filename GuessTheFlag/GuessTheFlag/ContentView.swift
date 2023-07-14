@@ -73,6 +73,7 @@ struct ContentView: View {
                             } label: {
                                 FlagImage(name: countries[index])
                                     .rotation3DEffect(.degrees(tappedIndex == index ? rotationAmount : 0), axis: (x: 0, y: 1, z: 0))
+                                    .opacity(tappedIndex == nil || tappedIndex == index ? 1 : 0.25)
                                     .animation(.default, value: rotationAmount)
                             }
                             .alert(scoreTitle, isPresented: $showingScore) {
