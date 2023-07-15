@@ -43,13 +43,52 @@ struct ContentView: View {
             
             Button("Generate questions", action: askQuestion)
             
+            Section {
+                Text(question)
+                    .font(.headline)
+                
+                HStack {
+                    ForEach(possibleAnswers, id: \.self) { answer in
+                        Button("\(answer)") {
+                            chooseAnswer(answer)
+                        }
+                        .alert(alertTitle, isPresented: $showingAlert) {
+                            Button("Continue", action: askQuestion)
+                        } message: {
+                            Text(alertMessage)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
         }.onAppear(perform: askQuestion)
     }
     
     func askQuestion() {
+        chosenTable = Int.random(in: 2...highestTable)
+        chosenFactor = Int.random(in: 2...20)
+        
+        question = "What is \(chosenTable) x \(chosenFactor)?"
+        let correctAnswer = chosenTable * chosenFactor
+        
+        possibleAnswers.removeAll(keepingCapacity: true)
+        possibleAnswers.append(correctAnswer)
+        possibleAnswers.append(correctAnswer + Int.random(in: 1...10))
+        possibleAnswers.append(correctAnswer - Int.random(in: 1...10))
+        possibleAnswers.shuffle()
     }
     
     func chooseAnswer(_ answer: Int) {
+        let correctAnswer = chosenTable * chosenFactor
+        if answer != correctAnswer {
+            alertTitle = "Wrong"
+            alertMessage = "Good guess but the answer was: \(correctAnswer)!"
+        } else {
+            alertTitle = "Correct"
+            alertMessage = "You're a pro at this!"
+            score += 1
+        }
+        showingAlert = true
     }
     
 }
