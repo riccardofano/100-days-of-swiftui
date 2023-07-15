@@ -18,11 +18,12 @@ struct ContentView: View {
     @State private var chosenFactor: Int = 5
     @State private var possibleAnswers: [Int] = []
     
+    @State private var gameEnded = false
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
-    @State private var currentQuestion = 1
+    @State private var currentQuestion = 0
     @State private var score = 0
     
     var body: some View {
@@ -41,9 +42,9 @@ struct ContentView: View {
             .pickerStyle(.wheel)
             .frame(maxHeight: 120)
             
-            Button("Generate questions", action: askQuestion)
+            Button("Generate questions", action: startGame)
             
-            Section {
+            Section("Question \(currentQuestion)") {
                 Text(question)
                     .font(.headline)
                 
@@ -60,11 +61,31 @@ struct ContentView: View {
                         .buttonStyle(.borderedProminent)
                     }
                 }
+                
+                Text("Score: \(score)")
             }
-        }.onAppear(perform: askQuestion)
+        }
+        .onAppear(perform: startGame)
+        .alert("Game over", isPresented: $gameEnded) {
+            Button("Restart", action: startGame)
+        } message: {
+            Text("Your final score was \(score)/\(maxQuestions)!")
+        }
+    }
+    
+    func startGame() {
+        currentQuestion = 0
+        score = 0
+        askQuestion()
     }
     
     func askQuestion() {
+        if currentQuestion == maxQuestions {
+            gameEnded = true
+            return
+        }
+        
+        currentQuestion += 1
         chosenTable = Int.random(in: 2...highestTable)
         chosenFactor = Int.random(in: 2...20)
         
