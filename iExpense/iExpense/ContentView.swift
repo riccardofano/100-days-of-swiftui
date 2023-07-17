@@ -7,27 +7,41 @@
 
 import SwiftUI
 
-struct User: Codable {
-    let firstName: String
-    let lastName: String
+struct ExpenseItem {
+    let name: String
+    let type: String
+    let amount: Decimal
+}
+
+class Expenses: ObservableObject {
+    @Published var items = [ExpenseItem]()
 }
 
 struct ContentView: View {
-    @AppStorage("Tap") private var tapCount = 0
-    @State private var user = User(firstName: "Bobby", lastName: "Smith")
-
+    @StateObject var expenses = Expenses()
+    
     var body: some View {
-        VStack {
-            Button("Tap count: \(tapCount)") {
-                tapCount += 1
+        NavigationView {
+            List {
+                ForEach(expenses.items, id: \.name) { item in
+                    Text(item.name)
+                }
+                .onDelete(perform: removeItems)
             }
-            Button("Save user") {
-                let encoder = JSONEncoder()
-                if let data = try? encoder.encode(user) {
-                    UserDefaults.standard.set(data, forKey: "User")
+            .navigationTitle("iExpense")
+            .toolbar {
+                Button {
+                    let expense = ExpenseItem(name: "Something", type: "idk", amount: 10)
+                    expenses.items.append(expense)
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
         }
+    }
+    
+    func removeItems(at offsets: IndexSet) {
+        expenses.items.remove(atOffsets: offsets)
     }
 }
 
