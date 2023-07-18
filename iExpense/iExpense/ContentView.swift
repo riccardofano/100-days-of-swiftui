@@ -11,7 +11,7 @@ struct ExpenseItem: Identifiable, Codable {
     var id = UUID()
     let name: String
     let type: String
-    let amount: Decimal
+    let amount: Double
 }
 
 class Expenses: ObservableObject {
@@ -38,6 +38,8 @@ struct ContentView: View {
     @StateObject var expenses = Expenses()
     @State private var showingAddExpense = false
     
+    let currencyFormatter: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "USD")
+    
     var body: some View {
         NavigationView {
             List {
@@ -50,7 +52,7 @@ struct ContentView: View {
                         }
                         
                         Spacer()
-                        Text(item.amount, format: .currency(code: "USD"))
+                        Text(item.amount, format: currencyFormatter)
                     }
                 }
                 .onDelete(perform: removeItems)

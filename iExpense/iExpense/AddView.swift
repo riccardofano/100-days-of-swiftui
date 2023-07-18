@@ -10,10 +10,12 @@ import SwiftUI
 struct AddView: View {
     @State private var name = ""
     @State private var type = "Personal"
-    @State private var amount: Decimal = 0
+    @State private var amount = 0.0
     
     @ObservedObject var expenses: Expenses
     @Environment(\.dismiss) var dismiss
+    
+    let currencyFormatter: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "USD")
 
     let types = ["Business", "Personal"]
 
@@ -28,12 +30,13 @@ struct AddView: View {
                     }
                 }
 
-                TextField("Amount", value: $amount, format: .currency(code: "USD"))
+                TextField("Amount", value: $amount, format: currencyFormatter)
                     .keyboardType(.decimalPad)
             }
             .navigationTitle("Add new expense")
             .toolbar {
                 Button("Save") {
+                    print(amount)
                     let expense = ExpenseItem(name: name, type: type, amount: amount)
                     expenses.items.append(expense)
                     dismiss()
