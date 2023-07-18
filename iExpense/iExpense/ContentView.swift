@@ -38,25 +38,37 @@ struct ContentView: View {
     @StateObject var expenses = Expenses()
     @State private var showingAddExpense = false
     
-    let currencyFormatter: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "USD")
+    var expenseGroups: (personal: [ExpenseItem], business: [ExpenseItem]) {
+        let initial = (personal: [ExpenseItem](), business: [ExpenseItem]())
+        return expenses.items.reduce(into: initial, { (accumulator, current) in
+            if current.type == "Personal" {
+                accumulator.personal.append(current)
+            } else {
+                accumulator.business.append(current)
+            }
+        })
+    }
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(expenses.items) { item in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(item.name)
-                                .font(.headline)
-                            Text(item.type)
+                if !expenseGroups.personal.isEmpty {
+                    Section("Personal") {
+                        ForEach(expenseGroups.personal) { item in
+                            ListItem(item: item)
                         }
-                        
-                        Spacer()
-                        Text(item.amount, format: currencyFormatter)
+                        .onDelete(perform: removeItems)
                     }
-                    .listRowBackground(item.amount > 100 ? Color.orange : item.amount > 10 ? Color.yellow : Color.white)
                 }
-                .onDelete(perform: removeItems)
+                
+                if !expenseGroups.business.isEmpty {
+                    Section("Business") {
+                        ForEach(expenseGroups.business) { item in
+                            ListItem(item: item)
+                        }
+                        .onDelete(perform: removeItems)
+                    }
+                }
             }
             .navigationTitle("iExpense")
             .toolbar {
@@ -74,6 +86,26 @@ struct ContentView: View {
     
     func removeItems(at offsets: IndexSet) {
         expenses.items.remove(atOffsets: offsets)
+    }
+}
+
+struct ListItem: View {
+    let item: ExpenseItem
+    
+    let currencyFormatter: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "USD")
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(item.name)
+                    .font(.headline)
+                Text(item.type)
+            }
+            
+            Spacer()
+            Text(item.amount, format: currencyFormatter)
+        }
+        .listRowBackground(item.amount > 100 ? Color.orange : item.amount > 10 ? Color.yellow : Color.white)
     }
 }
 
