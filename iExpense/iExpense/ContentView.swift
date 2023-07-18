@@ -54,6 +54,7 @@ struct ContentView: View {
                         Spacer()
                         Text(item.amount, format: currencyFormatter)
                     }
+                    .listRowBackground(item.amount > 100 ? Color.orange : item.amount > 10 ? Color.yellow : Color.white)
                 }
                 .onDelete(perform: removeItems)
             }
