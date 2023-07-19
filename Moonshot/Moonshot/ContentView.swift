@@ -8,22 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    let layout = [
+        GridItem(.adaptive(minimum: 80, maximum: 120)),
+    ]
+    
     var body: some View {
-        Button("Decode JSON") {
-            let input = """
-            {
-                "name": "Taylor Swift",
-                "address": {
-                    "street": "555, Taylor Swift Avenue",
-                    "city": "Nashville"
+        ScrollView {
+            LazyVGrid(columns: layout) {
+                ForEach(0..<100) {
+                    Text("Hello \($0)")
                 }
             }
-            """
-            
-            let data = Data(input.utf8)
-            let decoder = JSONDecoder()
-            if let user = try? decoder.decode(User.self, from: data) {
-                print(user.address.street)
+        }
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: layout) {
+                ForEach(0..<100) {
+                    Text("Hello \($0)")
+                }
             }
         }
     }
