@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        GeometryReader { geo in
-            Image("watercolor-floral-illustration")
-                .resizable()
-                .scaledToFit()
-                .frame(width: geo.size.width * 0.8)
-                .frame(width: geo.size.width, height: geo.size.height)
-                .background(.red)
+        NavigationView {
+            List(0..<100) { row in
+                NavigationLink {
+                    Text("Detail \(row)")
+                } label: {
+                    Text("Row \(row)")
+                }
+            }
+            .navigationTitle("SwiftUI")
         }
     }
 }
