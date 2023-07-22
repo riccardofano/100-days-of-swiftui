@@ -38,11 +38,7 @@ struct MissionView: View {
                         .frame(width: geo.size.width * 0.6)
                         .padding(.top)
                     
-                    Rectangle()
-                        .frame(height: 2)
-                        .foregroundColor(.lightBackground)
-                        .padding(.vertical)
-                    
+                    Divider()
                     
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading) {
@@ -57,10 +53,7 @@ struct MissionView: View {
                     }
                     .padding(.horizontal)
                     
-                    Rectangle()
-                        .frame(height: 2)
-                        .foregroundColor(.lightBackground)
-                        .padding(.vertical)
+                    Divider()
                     
                     HStack {
                         Text("Crew")
@@ -113,6 +106,15 @@ struct CrewView: View {
             }
         }
         .padding(.bottom)
+    }
+}
+
+struct Divider: View {
+    var body: some View {
+        Rectangle()
+            .frame(height: 2)
+            .foregroundColor(.lightBackground)
+            .padding(.vertical)
     }
 }
 
