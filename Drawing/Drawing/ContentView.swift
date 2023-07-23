@@ -11,12 +11,15 @@ struct ContentView: View {
     var body: some View {
         
         VStack {
+            Circle()
+                .strokeBorder(.blue, lineWidth: 40)
+            
             CustomTriangle()
                 .fill(.orange)
                 .frame(width: 300, height: 100)
         
             CustomArc(startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 229), clockwise: false)
-                .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .bevel))
+                .strokeBorder(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .bevel))
                 .frame(width: 89, height: 200)
         }
         
@@ -36,10 +39,12 @@ struct CustomTriangle: Shape {
     }
 }
 
-struct CustomArc: Shape {
+struct CustomArc: InsettableShape {
     var startAngle: Angle
     var endAngle: Angle
     var clockwise: Bool
+    
+    var insetAmount = 0.0
 
     func path(in rect: CGRect) -> Path {
         let rotationAdjustment = Angle(degrees: 90)
@@ -47,9 +52,15 @@ struct CustomArc: Shape {
         let adjustedEnd = endAngle - rotationAdjustment
         
         var path = Path()
-        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2, startAngle: adjustedStart, endAngle: adjustedEnd, clockwise: clockwise)
+        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY), radius: rect.width / 2 - insetAmount, startAngle: adjustedStart, endAngle: adjustedEnd, clockwise: clockwise)
 
         return path
+    }
+    
+    func inset(by amount: CGFloat) -> some InsettableShape {
+        var arc = self
+        arc.insetAmount += amount
+        return arc
     }
 }
 
