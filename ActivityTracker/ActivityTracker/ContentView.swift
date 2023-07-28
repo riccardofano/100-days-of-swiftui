@@ -15,7 +15,7 @@ struct Activity: Codable, Identifiable {
 }
 
 class Activities: ObservableObject {
-    var activities: [Activity]
+    @Published var activities: [Activity]
     
     init() {
         activities = [Activity(name: "Something", description: "I did a thing", timesCompleted: 0)]
@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAddActivitySheet) {
-                AddActivityView()
+                AddActivityView(activities: activities)
             }
         }
     }
