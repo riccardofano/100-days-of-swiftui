@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Activity: Codable, Identifiable {
+struct Activity: Codable, Identifiable, Equatable {
     var id = UUID()
     var name: String
     var description: String
@@ -21,7 +21,7 @@ class Activities: ObservableObject {
                 list = decodedList
                 return
             }
-        }        
+        }
         list = [Activity(name: "An activity", description: "I did a thing", timesCompleted: 0)]
     }
     
@@ -43,8 +43,10 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List{
-                ForEach(activities.list) { activity in
-                    Text(activity.name)
+                ForEach(Array(activities.list.enumerated()), id: \.element.id) { index, activity in
+                    NavigationLink(destination: DetailView(activities: activities, index: index)) {
+                        Text(activity.name)
+                    }
                 }
             }
             .navigationTitle("Activity tracker")
