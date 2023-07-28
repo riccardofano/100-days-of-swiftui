@@ -7,15 +7,46 @@
 
 import SwiftUI
 
+struct Activity: Codable, Identifiable {
+    var id = UUID()
+    var name: String
+    var description: String
+    var timesCompleted: Int
+}
+
+class Activities: ObservableObject {
+    var activities: [Activity]
+    
+    init() {
+        activities = [Activity(name: "Something", description: "I did a thing", timesCompleted: 0)]
+    }
+}
+
+
 struct ContentView: View {
+    @StateObject var activities = Activities()
+    
+    @State private var showingAddActivitySheet = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            List{
+                ForEach(activities.activities) { activity in
+                    Text(activity.name)
+                }
+            }
+            .navigationTitle("Activity tracker")
+            .toolbar {
+                Button {
+                    showingAddActivitySheet = true
+                } label: {
+                    Image(systemName: "plus.square")
+                }
+            }
+            .sheet(isPresented: $showingAddActivitySheet) {
+                AddActivityView()
+            }
         }
-        .padding()
     }
 }
 
