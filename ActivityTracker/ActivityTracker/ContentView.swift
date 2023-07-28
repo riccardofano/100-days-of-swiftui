@@ -15,10 +15,22 @@ struct Activity: Codable, Identifiable {
 }
 
 class Activities: ObservableObject {
-    @Published var activities: [Activity]
-    
     init() {
-        activities = [Activity(name: "Something", description: "I did a thing", timesCompleted: 0)]
+        if let savedList = UserDefaults.standard.data(forKey: "ActivityList") {
+            if let decodedList = try? JSONDecoder().decode([Activity].self, from: savedList) {
+                list = decodedList
+                return
+            }
+        }        
+        list = [Activity(name: "An activity", description: "I did a thing", timesCompleted: 0)]
+    }
+    
+    @Published var list: [Activity] {
+        didSet {
+            if let encoded = try? JSONEncoder().encode(list) {
+                UserDefaults.standard.set(encoded, forKey: "ActivityList")
+            }
+        }
     }
 }
 
@@ -31,7 +43,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List{
-                ForEach(activities.activities) { activity in
+                ForEach(activities.list) { activity in
                     Text(activity.name)
                 }
             }

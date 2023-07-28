@@ -24,7 +24,7 @@ struct AddActivityView: View {
             .toolbar {
                 Button("Save") {
                     let activity = Activity(name: name, description: description, timesCompleted: 0)
-                    activities.activities.append(activity)
+                    activities.list.append(activity)
                     dismiss()
                 }
             }
