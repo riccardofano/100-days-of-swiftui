@@ -38,33 +38,53 @@ struct Result: Codable {
 struct ContentView: View {
     @State private var results = [Result]()
     
+    @State private var username = ""
+    @State private var email = ""
+    
+    var disableForm: Bool {
+        username.count < 3 || !email.contains("@")
+    }
+    
     var body: some View {
-        List {
-            AsyncImage(url: URL(string: "https://hws.dev/img/logo.png")) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } else if phase.error != nil {
-                    Text("There was an error loading the image")
-                } else {
-                    ProgressView()
-                }
+        Form {
+            Section {
+                TextField("Username", text: $username)
+                TextField("Email", text: $email)
             }
-            .frame(width: 100, height: 100)
             
-            ForEach(results, id: \.trackId) { result in
-                VStack(alignment: .leading) {
-                    Text(result.trackName)
-                        .font(.headline)
-                    Text(result.collectionName)
+            Section {
+                Button("Create account") {
+                    print("Account created")
                 }
-                
             }
+            .disabled(disableForm)
         }
-        .task {
-            await loadData()
-        }
+//        List {
+//            AsyncImage(url: URL(string: "https://hws.dev/img/logo.png")) { phase in
+//                if let image = phase.image {
+//                    image
+//                        .resizable()
+//                        .scaledToFit()
+//                } else if phase.error != nil {
+//                    Text("There was an error loading the image")
+//                } else {
+//                    ProgressView()
+//                }
+//            }
+//            .frame(width: 100, height: 100)
+//
+//            ForEach(results, id: \.trackId) { result in
+//                VStack(alignment: .leading) {
+//                    Text(result.trackName)
+//                        .font(.headline)
+//                    Text(result.collectionName)
+//                }
+//
+//            }
+//        }
+//        .task {
+//            await loadData()
+//        }
     }
     
     func loadData() async {
