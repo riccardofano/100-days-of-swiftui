@@ -23,6 +23,15 @@ class Order: ObservableObject {
     }
     @Published var extraFrosting = false
     @Published var addSprinkles = false
+    
+    @Published var name = ""
+    @Published var streetAddress = ""
+    @Published var city = ""
+    @Published var zip = ""
+    
+    var hasInvalidAddress: Bool {
+        return name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty
+    }
 }
 
 struct ContentView: View {
