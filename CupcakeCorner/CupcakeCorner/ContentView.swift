@@ -34,7 +34,8 @@ class Order: ObservableObject, Codable {
     @Published var zip = ""
     
     var hasInvalidAddress: Bool {
-        return name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty
+        let allStrings = "\(name)\(streetAddress)\(city)\(zip)".trimmingCharacters(in: .whitespaces)
+        return allStrings.isEmpty
     }
     
     var cost: Double {
