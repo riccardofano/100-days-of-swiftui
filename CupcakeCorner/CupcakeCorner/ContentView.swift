@@ -8,16 +8,32 @@
 import SwiftUI
 
 enum CodingKeys: CodingKey {
-    case type, quantity, extraFrosting, addSprinkles, name, streetAddress, city, zip
+    case order
 }
 
-class Order: ObservableObject, Codable {
+class AppState: ObservableObject, Codable {
+    @Published var order = Order()
+    
+    init() { }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        order = try container.decode(Order.self, forKey: .order)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(order, forKey: .order)
+    }
+}
+
+struct Order: Codable {
     static let types = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
     
-    @Published var type = 0
-    @Published var quantity = 3
+    var type = 0
+    var quantity = 3
     
-    @Published var specialRequestEnabled = false {
+    var specialRequestEnabled = false {
         didSet {
             if specialRequestEnabled == false {
                 extraFrosting = false
@@ -25,13 +41,13 @@ class Order: ObservableObject, Codable {
             }
         }
     }
-    @Published var extraFrosting = false
-    @Published var addSprinkles = false
+    var extraFrosting = false
+    var addSprinkles = false
     
-    @Published var name = ""
-    @Published var streetAddress = ""
-    @Published var city = ""
-    @Published var zip = ""
+    var name = ""
+    var streetAddress = ""
+    var city = ""
+    var zip = ""
     
     var hasInvalidAddress: Bool {
         let allStrings = "\(name)\(streetAddress)\(city)\(zip)".trimmingCharacters(in: .whitespaces)
@@ -53,68 +69,37 @@ class Order: ObservableObject, Codable {
         return cost
     }
     
-    init() { }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        type = try container.decode(Int.self, forKey: .type)
-        quantity = try container.decode(Int.self, forKey: .quantity)
-
-        extraFrosting = try container.decode(Bool.self, forKey: .extraFrosting)
-        addSprinkles = try container.decode(Bool.self, forKey: .addSprinkles)
-
-        name = try container.decode(String.self, forKey: .name)
-        streetAddress = try container.decode(String.self, forKey: .streetAddress)
-        city = try container.decode(String.self, forKey: .city)
-        zip = try container.decode(String.self, forKey: .zip)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encode(type, forKey: .type)
-        try container.encode(quantity, forKey: .quantity)
-
-        try container.encode(extraFrosting, forKey: .extraFrosting)
-        try container.encode(addSprinkles, forKey: .addSprinkles)
-
-        try container.encode(name, forKey: .name)
-        try container.encode(streetAddress, forKey: .streetAddress)
-        try container.encode(city, forKey: .city)
-        try container.encode(zip, forKey: .zip)
-    }
 }
 
 struct ContentView: View {
-    @StateObject var order = Order()
+    @StateObject var state = AppState()
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    Picker("Select your cupcake type", selection: $order.type) {
+                    Picker("Select your cupcake type", selection: $state.order.type) {
                         ForEach(Order.types.indices, id: \.self) {
                             Text(Order.types[$0])
                         }
                     }
                     
-                    Stepper("Number of cupcakes: \(order.quantity)", value: $order.quantity, in: 3...20)
+                    Stepper("Number of cupcakes: \(state.order.quantity)", value: $state.order.quantity, in: 3...20)
                 }
                 
                 Section {
-                    Toggle("Any special requests?", isOn: $order.specialRequestEnabled)
+                    Toggle("Any special requests?", isOn: $state.order.specialRequestEnabled)
                     
-                    if order.specialRequestEnabled {
-                        Toggle("Add extra frosting", isOn: $order.extraFrosting)
+                    if state.order.specialRequestEnabled {
+                        Toggle("Add extra frosting", isOn: $state.order.extraFrosting)
                         
-                        Toggle("Add sprinkles", isOn: $order.addSprinkles)
+                        Toggle("Add sprinkles", isOn: $state.order.addSprinkles)
                     }
                 }
                 
                 Section {
                     NavigationLink {
-                        AddressView(order: order)
+                        AddressView(state: state)
                     } label: {
                         Text("Delivery details")
                     }
