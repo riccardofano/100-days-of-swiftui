@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            PushButton(title: "Push me", isOn: rememberMe)
+            PushButton(title: "Push me", isOn: $rememberMe)
             Text(rememberMe ? "On" : "Off")
         }
         .padding()
@@ -21,7 +21,7 @@ struct ContentView: View {
 
 struct PushButton: View {
     var title: String
-    @State var isOn: Bool
+    @Binding var isOn: Bool
     
     var onColors = [Color.red, Color.yellow]
     var offColors = [Color(white: 0.6), Color(white: 0.4)]
