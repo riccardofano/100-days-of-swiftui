@@ -10,12 +10,21 @@ import SwiftUI
 struct ContentView: View {
     @State private var rememberMe = false
     
+    @AppStorage("notes") private var notes = ""
+    
     var body: some View {
-        VStack {
-            PushButton(title: "Push me", isOn: $rememberMe)
-            Text(rememberMe ? "On" : "Off")
+        NavigationView {
+            VStack {
+                TextEditor(text: $notes)
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(.gray))
+                
+                PushButton(title: "Push me", isOn: $rememberMe)
+                Text(rememberMe ? "On" : "Off")
+            }
+            .navigationTitle("Notes")
+            .padding()
         }
-        .padding()
     }
 }
 
