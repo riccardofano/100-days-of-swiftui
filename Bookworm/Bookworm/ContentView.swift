@@ -9,7 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(sortDescriptors: []) var books: FetchedResults<Book>
+    @FetchRequest(sortDescriptors: [
+        SortDescriptor(\.author),
+        SortDescriptor(\.title, order: .reverse)
+    ]) var books: FetchedResults<Book>
     
     @State private var showingAddBook = false
     
