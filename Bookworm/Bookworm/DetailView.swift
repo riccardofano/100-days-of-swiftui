@@ -14,6 +14,13 @@ struct DetailView: View {
     @Environment(\.dismiss) var dismiss
     @State private var showingDeleteAlert = false
     
+    var completionDate: String {
+        if let date = book.dateAdded {
+            return "Added \(date.formatted(date: .long, time: .omitted))"
+        }
+        return "Unknown completion date"
+    }
+    
     var body: some View {
         ScrollView {
             ZStack(alignment: .bottomTrailing) {
@@ -33,6 +40,10 @@ struct DetailView: View {
             
             Text(book.author ?? "Unknown author")
                 .font(.title)
+                .foregroundColor(.secondary)
+            
+            Text(completionDate)
+                .font(.callout)
                 .foregroundColor(.secondary)
             
             Text(book.review ?? "No reviews")

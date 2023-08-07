@@ -20,9 +20,7 @@ struct RatingView: View {
     var onColor = Color.yellow
     
     var body: some View {
-        print(rating)
-        
-        return HStack {
+        HStack {
             if !label.isEmpty {
                 Text(label)
             }
