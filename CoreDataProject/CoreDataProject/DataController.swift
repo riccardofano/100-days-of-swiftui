@@ -16,6 +16,9 @@ class DataController: ObservableObject {
             if let error = error {
                 print("Core Data failed to load: \(error.localizedDescription)")
             }
+
+            // merge all the duplicates into a single record
+            self.container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
     }
 }

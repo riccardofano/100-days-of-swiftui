@@ -12,11 +12,30 @@ struct Student: Hashable {
 }
 
 struct ContentView: View {
-    let students = [Student(name: "Harry Potter"), Student(name: "Hermione Granger")]
-
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(sortDescriptors: []) var wizards: FetchedResults<Wizard>
+    
     var body: some View {
-        List(students, id: \.self) { student in
-            Text("\(student.name) = \(student.hashValue)")
+        VStack {
+            List(wizards, id: \.self) { wizard in
+                Text(wizard.name ?? "Unknonw wizard")
+            }
+            
+            Button("Add") {
+                let wizard = Wizard(context: moc)
+                wizard.name = "Harry Potter"
+            }
+            
+            Button("Save") {
+                if moc.hasChanges {
+                    do {
+                        try moc.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
         }
     }
 }
