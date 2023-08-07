@@ -14,10 +14,14 @@ struct AddBookView: View {
     @State private var title = ""
     @State private var author = ""
     @State private var rating = 3
-    @State private var genre = ""
     @State private var review = ""
     
+    @State private var genre = "Fantasy"
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
+    
+    var disableSubmission: Bool {
+        return title.isEmpty || author.isEmpty || genre.isEmpty
+    }
     
     var body: some View {
         NavigationView {
@@ -53,6 +57,7 @@ struct AddBookView: View {
                         try? moc.save()
                         dismiss()
                     }
+                    .disabled(disableSubmission)
                 }
             }
             .navigationTitle("Add book")
