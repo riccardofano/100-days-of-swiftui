@@ -25,10 +25,11 @@ struct FilteredList<T: NSManagedObject, Content: View>: View {
     init(keyFilter: String,
         predicate: SearchPredicate,
         valueFilter: String,
+        sort: [SortDescriptor<T>] = [],
         @ViewBuilder content: @escaping (T) -> Content
    ) {
         _fetchRequest = FetchRequest<T>(
-            sortDescriptors: [],
+            sortDescriptors: sort,
             // %K is how you specify a k, it's not surrounded by quotes like %@
             predicate: NSPredicate(format: "%K \(predicate.rawValue) %@", keyFilter, valueFilter)
         )
