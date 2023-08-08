@@ -6,26 +6,24 @@
 //
 
 import SwiftUI
+import CoreData
 
-struct FilteredList: View {
-    @FetchRequest var fetchRequest: FetchedResults<Singer>
+struct FilteredList<T: NSManagedObject, Content: View>: View {
+    let content: (T) -> Content
+    @FetchRequest var fetchRequest: FetchedResults<T>
     
-    init(filter: String) {
-        _fetchRequest = FetchRequest<Singer>(
+    init(keyFilter: String, valueFilter: String, @ViewBuilder content: @escaping (T) -> Content) {
+        _fetchRequest = FetchRequest<T>(
             sortDescriptors: [],
-            predicate: NSPredicate(format: "lastName BEGINSWITH %@", filter)
+            // %K is how you specify a k, it's not surrounded by quotes like %@
+            predicate: NSPredicate(format: "%K BEGINSWITH %@", keyFilter, valueFilter)
         )
+        self.content = content
     }
     
     var body: some View {
-        List(fetchRequest, id: \.self) { singer in
-            Text("\(singer.wrappedFirstName) \(singer.wrappedLastName)")
+        List(fetchRequest, id: \.self) { entity in
+            self.content(entity)
         }
-    }
-}
-
-struct FilteredList_Previews: PreviewProvider {
-    static var previews: some View {
-        FilteredList(filter: "A")
     }
 }
