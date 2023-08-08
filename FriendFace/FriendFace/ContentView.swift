@@ -30,14 +30,24 @@ struct ContentView: View {
     @State private var users = [User]()
     
     var body: some View {
-        List {
-            ForEach(users) { user in
-                Text(user.name)
+        NavigationView {
+            List {
+                ForEach(users) { user in
+                    NavigationLink(destination: UserDetailView(user: user)) {
+                        HStack {
+                            Circle()
+                                .frame(width: 8, height: 8)
+                                .foregroundColor(user.isActive ? Color.green : Color.red)
+                                .padding(.trailing)
+                            Text(user.name)
+                        }
+                    }
+                }
             }
-        }
-        .task {
-            if users.isEmpty {
-               await loadData()
+            .task {
+                if users.isEmpty {
+                    await loadData()
+                }
             }
         }
     }
@@ -55,10 +65,7 @@ struct ContentView: View {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
             
-            print(data)
-            
             if let decodedUsers = try? decoder.decode([User].self, from: data) {
-                print(decodedUsers)
                 users = decodedUsers
             }
         } catch {
