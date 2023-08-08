@@ -11,28 +11,28 @@ struct UserDetailView: View {
     let user: User
     
     var body: some View {
-        print(user.friends)
-        
-        return NavigationView {
-            ScrollView {
-                Characteristic(label: "Age", systemImage: "hourglass", text: "\(user.age)")
-                Characteristic(label: "Email", systemImage: "envelope", text: user.email)
-                Characteristic(label: "Address", systemImage: "mappin.and.ellipse", text: user.address)
-                Characteristic(label: "About", systemImage: "questionmark.circle", text: user.about)
+        NavigationView {
+            List {
+                Section() {
+                    Characteristic(label: "Age", text: "\(user.age)")
+                    Characteristic(label: "Email", text: user.email)
+                    Characteristic(label: "Address", text: user.address)
+                    Characteristic(label: "Joined", text: user.registered.formatted(date: .long, time: .standard))
+                    Characteristic(label: "About", text: user.about)
+                }
                 
-                VStack(alignment: .leading) {
-                    Label("These are my friends", systemImage: "person.3.sequence")
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 2)
-                    
+                Section("Tags") {
+                    ForEach(user.tags, id: \.self) { tag in
+                        Text(tag)
+                    }
+                }
+                
+                Section("My friends") {
                     ForEach(user.friends) { friend in
                         Text(friend.name)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal)
             .navigationTitle(user.name)
         }
     }
@@ -40,22 +40,15 @@ struct UserDetailView: View {
 
 struct Characteristic: View {
     let label: String
-    let systemImage: String
-    
     let text: String
     
     var body: some View {
         VStack(alignment: .leading) {
-            Label(label, systemImage: systemImage)
-                .font(.title3)
-                .foregroundColor(.secondary)
-                .frame(width: 120, alignment: .leading)
-                .padding(.bottom, 2)
-            
+            Text(label)
+                .fontWeight(.bold)
             Text(text)
+                .foregroundColor(.black.opacity(0.7))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.bottom)
     }
 }
 
@@ -81,3 +74,4 @@ struct UserDetailView_Previews: PreviewProvider {
         UserDetailView(user: user)
     }
 }
+

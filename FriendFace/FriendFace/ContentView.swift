@@ -35,15 +35,29 @@ struct ContentView: View {
                 ForEach(users) { user in
                     NavigationLink(destination: UserDetailView(user: user)) {
                         HStack {
+                            VStack(alignment: .leading) {
+                                Text(user.name)
+                                Text(user.email)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            let circleColor = user.isActive ? Color.green : Color.red
                             Circle()
                                 .frame(width: 8, height: 8)
-                                .foregroundColor(user.isActive ? Color.green : Color.red)
-                                .padding(.trailing)
-                            Text(user.name)
+                                .foregroundColor(circleColor)
+                                .overlay {
+                                    Circle()
+                                        .frame(width: 16, height: 16)
+                                        .foregroundColor(circleColor)
+                                        .opacity(0.2)
+                                }
                         }
                     }
                 }
             }
+            .navigationTitle("All users")
             .task {
                 if users.isEmpty {
                     await loadData()
@@ -53,12 +67,16 @@ struct ContentView: View {
     }
     
     func loadData() async {
-        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
-            print("Invalid URL")
+//        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
+//            print("Invalid URL")
+//            return
+//        }
+        
+        // Read from a file to not bother the api
+        guard let url = Bundle.main.url(forResource: "friendface", withExtension: "json") else {
+            print("Invalid file path")
             return
         }
-        
-        print("Loaded data")
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
