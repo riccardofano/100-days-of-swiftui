@@ -52,7 +52,9 @@ struct ContentView: View {
             }
             .navigationTitle("All users")
             .task {
-                await loadData()
+                if users.isEmpty {
+                    await loadData()
+                }
             }
         }
     }
@@ -87,7 +89,12 @@ struct ContentView: View {
                         newUser.isActive = user.isActive
                         newUser.name = user.name
                         newUser.registered = user.registered
-                        newUser.tags = user.tags.joined(separator: ",")
+                        
+                        for tag in user.tags {
+                            let newTag = Tag(context: moc)
+                            newTag.name = tag
+                            newTag.user = newUser
+                        }
                         
                         for friend in user.friends {
                             let newFriend = CachedFriend(context: moc)
@@ -100,7 +107,6 @@ struct ContentView: View {
                         try? moc.save()
                     }
                 }
-                
             }
         } catch {
             print("Invalid data")

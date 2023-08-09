@@ -11,30 +11,28 @@ struct UserDetailView: View {
     let user: CachedUser
     
     var body: some View {
-        NavigationView {
-            List {
-                Section() {
-                    Characteristic(label: "Age", text: "\(user.age)")
-                    Characteristic(label: "Email", text: user.email ?? "Unknown email")
-                    Characteristic(label: "Address", text: user.address ?? "Unknown address")
-                    Characteristic(label: "Joined", text: user.registered?.formatted(date: .long, time: .standard) ?? "Unknown date")
-                    Characteristic(label: "About", text: user.about ?? "Nothing here")
-                }
-                
-                Section("Tags") {
-                    ForEach(user.tags?.components(separatedBy: ",") ?? [], id: \.self) { tag in
-                        Text(tag)
-                    }
-                }
-                
-                Section("My friends") {
-                    ForEach(user.friendList) { friend in
-                        Text(friend.name ?? "Unknown friend")
-                    }
+        List {
+            Section() {
+                Characteristic(label: "Age", text: "\(user.age)")
+                Characteristic(label: "Email", text: user.email ?? "Unknown email")
+                Characteristic(label: "Address", text: user.address ?? "Unknown address")
+                Characteristic(label: "Joined", text: user.registered?.formatted(date: .long, time: .standard) ?? "Unknown date")
+                Characteristic(label: "About", text: user.about ?? "Nothing here")
+            }
+            
+            Section("Tags") {
+                ForEach(user.tagList) { tag in
+                    Text(tag.wrappedName)
                 }
             }
-            .navigationTitle(user.name ?? "Someone I know")
+            
+            Section("My friends") {
+                ForEach(user.friendList) { friend in
+                    Text(friend.name ?? "Unknown friend")
+                }
+            }
         }
+        .navigationTitle(user.name ?? "Someone I know")
     }
 }
 
