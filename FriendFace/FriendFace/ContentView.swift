@@ -27,7 +27,9 @@ struct Friend: Codable, Identifiable {
 }
 
 struct ContentView: View {
-    @State private var users = [User]()
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(sortDescriptors: []) var users: FetchedResults<CachedUser>
     
     var body: some View {
         NavigationView {
@@ -36,8 +38,8 @@ struct ContentView: View {
                     NavigationLink(destination: UserDetailView(user: user)) {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(user.name)
-                                Text(user.email)
+                                Text(user.name ?? "Unknown name")
+                                Text(user.email ?? "")
                                     .foregroundColor(.secondary)
                             }
                             
@@ -50,18 +52,17 @@ struct ContentView: View {
             }
             .navigationTitle("All users")
             .task {
-                if users.isEmpty {
-                    await loadData()
-                }
+                await loadData()
             }
         }
     }
     
     func loadData() async {
-//        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
-//            print("Invalid URL")
-//            return
-//        }
+        
+        //        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
+        //            print("Invalid URL")
+        //            return
+        //        }
         
         // Read from a file to not bother the api
         guard let url = Bundle.main.url(forResource: "friendface", withExtension: "json") else {
@@ -75,7 +76,31 @@ struct ContentView: View {
             decoder.dateDecodingStrategy = .iso8601
             
             if let decodedUsers = try? decoder.decode([User].self, from: data) {
-                users = decodedUsers
+                await MainActor.run {
+                    for user in decodedUsers {
+                        let newUser = CachedUser(context: moc)
+                        newUser.id = user.id
+                        newUser.about = user.about
+                        newUser.age = Int16(user.age)
+                        newUser.company = user.company
+                        newUser.email = user.email
+                        newUser.isActive = user.isActive
+                        newUser.name = user.name
+                        newUser.registered = user.registered
+                        newUser.tags = user.tags.joined(separator: ",")
+                        
+                        for friend in user.friends {
+                            let newFriend = CachedFriend(context: moc)
+                            newFriend.id = friend.id
+                            newFriend.name = friend.name
+                            newFriend.user = newUser
+                        }
+                        
+                        // Need to make sure to save at each user otherwise not everything will get saved
+                        try? moc.save()
+                    }
+                }
+                
             }
         } catch {
             print("Invalid data")
