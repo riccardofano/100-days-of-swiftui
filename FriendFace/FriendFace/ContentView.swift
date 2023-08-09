@@ -43,16 +43,7 @@ struct ContentView: View {
                             
                             Spacer()
                             
-                            let circleColor = user.isActive ? Color.green : Color.red
-                            Circle()
-                                .frame(width: 8, height: 8)
-                                .foregroundColor(circleColor)
-                                .overlay {
-                                    Circle()
-                                        .frame(width: 16, height: 16)
-                                        .foregroundColor(circleColor)
-                                        .opacity(0.2)
-                                }
+                            ActivityIndicator(isActive: user.isActive)
                         }
                     }
                 }
@@ -95,5 +86,22 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct ActivityIndicator: View {
+    let isActive: Bool
+    var circleColor: Color { isActive ? Color.green : Color.red }
+    
+    var body: some View {
+        Circle()
+            .frame(width: 8, height: 8)
+            .foregroundColor(circleColor)
+            .overlay {
+                Circle()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(circleColor)
+                    .opacity(0.2)
+            }
     }
 }
