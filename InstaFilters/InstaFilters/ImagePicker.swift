@@ -5,7 +5,6 @@
 //  Created by Riccardo Fano on 2023-08-10.
 //
 
-import Foundation
 import SwiftUI
 import PhotosUI
 
