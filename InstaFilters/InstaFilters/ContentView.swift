@@ -12,6 +12,7 @@ import CoreImage.CIFilterBuiltins
 struct ContentView: View {
     @State private var image: Image?
     @State private var inputImage: UIImage?
+    @State private var processedImage: UIImage?
     @State private var showingImagePicker = false
     
     @State private var showingFilterSheet = false
@@ -70,7 +71,17 @@ struct ContentView: View {
     }
     
     func save() {
+        guard let processedImage = processedImage else { return }
+        let imageSaver = ImageSaver()
         
+        imageSaver.errorHandler = {
+            print("Error: \($0.localizedDescription)")
+        }
+        imageSaver.successHandler = {
+            print("Saved with success!")
+        }
+        
+        imageSaver.writeToPhotoAlbum(image: processedImage)
     }
     
     func loadImage() {
@@ -97,6 +108,7 @@ struct ContentView: View {
         if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
             let uiImage = UIImage(cgImage: cgImage)
             image = Image(uiImage: uiImage)
+            processedImage = uiImage
         }
     }
 }
