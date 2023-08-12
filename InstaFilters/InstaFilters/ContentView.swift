@@ -16,9 +16,17 @@ struct ContentView: View {
     @State private var showingImagePicker = false
     
     @State private var showingFilterSheet = false
+    
     @State private var intensity: Float = 1
+    @State private var radius: Float = 20
+    @State private var scale: Float = 8
+    
     @State private var currentFilter: CIFilter = CIFilter.sepiaTone()
     let context = CIContext()
+    
+    var inputKeys: [String] {
+        currentFilter.inputKeys
+    }
     
     var body: some View {
         NavigationView {
@@ -36,10 +44,27 @@ struct ContentView: View {
                 }
                 .onTapGesture { showingImagePicker = true }
                 
-                HStack {
-                    Text("Filter intesity")
-                    Slider(value: $intensity, in: 0...1)
-                        .onChange(of: intensity) { _ in applyProcessing() }
+                VStack {
+                    HStack {
+                        Text("Filter intensity")
+                        Slider(value: $intensity, in: 0...1)
+                            .onChange(of: intensity) { _ in applyProcessing() }
+                            .disabled(!inputKeys.contains(kCIInputIntensityKey))
+                    }
+                        
+                    HStack {
+                        Text("Filter radius")
+                        Slider(value: $radius, in: 0...200)
+                            .onChange(of: radius) { _ in applyProcessing() }
+                            .disabled(!inputKeys.contains(kCIInputRadiusKey))
+                    }
+                        
+                    HStack {
+                        Text("Filter scale")
+                        Slider(value: $scale, in: 0...20)
+                            .onChange(of: scale) { _ in applyProcessing() }
+                            .disabled(!inputKeys.contains(kCIInputScaleKey))
+                    }
                 }
                 .padding(.vertical)
                 
@@ -99,11 +124,14 @@ struct ContentView: View {
     }
     
     func applyProcessing() {
-        let inputKeys = currentFilter.inputKeys
-
+        // intensity
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(intensity, forKey: kCIInputIntensityKey) }
-        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(intensity * 200, forKey: kCIInputRadiusKey) }
-        if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(intensity * 100, forKey: kCIInputScaleKey) }
+        
+        // radius
+        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(radius, forKey: kCIInputRadiusKey) }
+        
+        // scale
+        if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(scale, forKey: kCIInputScaleKey) }
         
         guard let outputImage = currentFilter.outputImage else { return }
         if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
