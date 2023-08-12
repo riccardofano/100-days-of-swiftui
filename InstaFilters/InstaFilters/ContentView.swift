@@ -84,12 +84,12 @@ struct ContentView: View {
             }
             .confirmationDialog("Select a filter", isPresented: $showingFilterSheet) {
                 Button("Crystallize") { setFilter(CIFilter.crystallize()) }
-                Button("Edges") { setFilter(CIFilter.edges()) }
                 Button("Gaussian Blur") { setFilter(CIFilter.gaussianBlur()) }
                 Button("Pixellate") { setFilter(CIFilter.pixellate()) }
                 Button("Sepia Tone") { setFilter(CIFilter.sepiaTone()) }
                 Button("Unsharp Mask") { setFilter(CIFilter.unsharpMask()) }
-                Button("Vignette") { setFilter(CIFilter.vignette()) }
+                Button("Gloom") { setFilter(CIFilter.gloom()) }
+                Button("Pointillize") { setFilter(CIFilter.pointillize()) }
                 Button("Cancel", role: .cancel) { }
             }
             .padding([.horizontal, .bottom])
@@ -124,13 +124,8 @@ struct ContentView: View {
     }
     
     func applyProcessing() {
-        // intensity
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(intensity, forKey: kCIInputIntensityKey) }
-        
-        // radius
         if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(radius, forKey: kCIInputRadiusKey) }
-        
-        // scale
         if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(scale, forKey: kCIInputScaleKey) }
         
         guard let outputImage = currentFilter.outputImage else { return }
