@@ -25,14 +25,12 @@ struct ContentView: View {
     ].sorted()
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        Text("Hello World")
+            .onTapGesture {
+                FileManager().writeToDocumentsFile(filename: "message.txt", message: "Dude where's my car?")
+            }
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
