@@ -17,6 +17,28 @@ struct User: Identifiable, Comparable {
     let lastName: String
 }
 
+enum LoadingState {
+    case loading, success, failed
+}
+
+struct LoadingView: View {
+    var body: some View {
+        Text("Loading...")
+    }
+}
+
+struct SuccessView: View {
+    var body: some View {
+        Text("Success!")
+    }
+}
+
+struct FailedView: View {
+    var body: some View {
+        Text("Failed.")
+    }
+}
+
 struct ContentView: View {
     let users = [
         User(firstName: "Arnold", lastName: "Rimmer"),
@@ -24,11 +46,23 @@ struct ContentView: View {
         User(firstName: "David", lastName: "Lister"),
     ].sorted()
     
+    @State private var loadingState = LoadingState.failed
+    
     var body: some View {
-        Text("Hello World")
-            .onTapGesture {
-                FileManager().writeToDocumentsFile(filename: "message.txt", message: "Dude where's my car?")
+        VStack {
+            if loadingState == .loading {
+                LoadingView()
+            } else if loadingState == .success {
+                SuccessView()
+            } else if loadingState == .failed {
+                FailedView()
             }
+            
+            Text("Hello World")
+                .onTapGesture {
+                    FileManager().writeToDocumentsFile(filename: "message.txt", message: "Dude where's my car?")
+                }
+        }
     }
     
 }
