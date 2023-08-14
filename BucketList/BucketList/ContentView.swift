@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import LocalAuthentication
 
 struct User: Identifiable, Comparable {
     static func < (lhs: User, rhs: User) -> Bool {
@@ -60,10 +61,20 @@ struct ContentView: View {
     
     @State private var loadingState = LoadingState.failed
     @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.12), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+    @State private var isUnlocked = false
     
     var body: some View {
         NavigationView {
             VStack {
+                VStack {
+                    if isUnlocked {
+                        Text("Unlocked")
+                    } else {
+                        Text("Locked")
+                    }
+                }
+                .onAppear(perform: authenticate)
+
                 Map(coordinateRegion: $mapRegion, annotationItems: locations) { location in
                     MapAnnotation(coordinate: location.coordinate) {
                         NavigationLink {
@@ -93,6 +104,27 @@ struct ContentView: View {
         }
     }
     
+    func authenticate() {
+        let context = LAContext()
+        var error: NSError?
+
+        // check whether biometric authentication is possible
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            // it's possible, so go ahead and use it
+            let reason = "We need to unlock your data."
+
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
+                // authentication has now completed
+                if success {
+                    isUnlocked = true
+                } else {
+                    // there was a problem
+                }
+            }
+        } else {
+            // no biometrics
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
