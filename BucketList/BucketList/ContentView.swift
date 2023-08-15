@@ -15,7 +15,18 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Map(coordinateRegion: $mapRegion, annotationItems: locations) { location in
-                MapMarker(coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
+                MapAnnotation(coordinate: location.coordinate) {
+                    VStack {
+                        Image(systemName: "star.circle")
+                            .resizable()
+                            .foregroundColor(.red)
+                            .frame(width: 32, height: 32)
+                            .background(.white)
+                            .clipShape(Circle())
+
+                        Text(location.name)
+                    }
+                }
             }
             .ignoresSafeArea()
             
