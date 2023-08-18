@@ -17,6 +17,7 @@ extension ContentView {
         @Published private(set) var locations: [Location]
         @Published var selectedPlace: Location?
         @Published var isUnlocked = false
+        @Published var showingAlert = false
         
         init() {
             do {
@@ -45,12 +46,12 @@ extension ContentView {
 
                 context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
 
-                    if success {
-                        Task { @MainActor in
+                    Task { @MainActor in
+                        if success {
                             self.isUnlocked = true
+                        } else {
+                            self.showingAlert = true
                         }
-                    } else {
-                        // error
                     }
                 }
             } else {

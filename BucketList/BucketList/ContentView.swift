@@ -65,6 +65,11 @@ struct ContentView: View {
                 .clipShape(Capsule())
             }
         }
+        .alert("Biometric identification failed", isPresented: $viewModel.showingAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Provide a valid identification, you piece!")
+        }
         .sheet(item: $viewModel.selectedPlace) { place in
             EditView(location: place) { newLocation in
                 viewModel.updateLocation(location: newLocation)
