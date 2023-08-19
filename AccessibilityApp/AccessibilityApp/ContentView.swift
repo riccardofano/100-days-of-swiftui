@@ -25,15 +25,31 @@ struct ContentView: View {
     @State private var selectedPicture = Int.random(in: 0...3)
     
     var body: some View {
-        Image(pictures[selectedPicture])
-            .resizable()
-            .scaledToFit()
-            .onTapGesture {
-                selectedPicture = Int.random(in: 0...3)
+        VStack {
+            Image(pictures[selectedPicture])
+                .resizable()
+                .scaledToFit()
+                .onTapGesture {
+                    selectedPicture = Int.random(in: 0...3)
+                }
+                .accessibilityLabel(labels[selectedPicture])
+                .accessibilityAddTraits(.isButton)
+                .accessibilityRemoveTraits(.isImage)
+            
+            Image(decorative: pictures[0])
+                .accessibilityHidden(true)
+            
+            VStack {
+                Text("Your score is")
+                Text("1000")
+                    .font(.title)
             }
-            .accessibilityLabel(labels[selectedPicture])
-            .accessibilityAddTraits(.isButton)
-            .accessibilityRemoveTraits(.isImage)
+//            .combine adds a pause between different views so it might be better to just combine the text ourself
+//            .accessibilityElement(children: .combine)
+            // children: .ignore is the default so there's no need to add it
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Your score is 1000")
+        }
     }
 }
 
