@@ -106,6 +106,9 @@ struct ListItem: View {
             Text(item.amount, format: currencyFormatter)
         }
         .listRowBackground(item.amount > 100 ? Color.orange : item.amount > 10 ? Color.yellow : Color.white)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(item.name), amounting to \(item.amount, format: currencyFormatter)")
+        .accessibilityHint(item.type)
     }
 }
 
