@@ -9,7 +9,6 @@ import SwiftUI
 import PhotosUI
 
 struct ImagePicker: UIViewControllerRepresentable {
-    // this needs to be a class so Objective C can inherit from NSObject
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
         var parent: ImagePicker
         
