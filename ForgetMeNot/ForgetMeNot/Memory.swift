@@ -8,7 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct Memory {
+struct Memory: Identifiable {
+    let id = UUID()
     let picture: UIImage
     let description: String
     let tagged: [String]

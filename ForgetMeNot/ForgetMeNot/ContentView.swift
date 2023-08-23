@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    let pictures = [String]();
     @State private var showingAddImageView = false
     @StateObject var memories = Memories()
     
@@ -16,18 +15,26 @@ struct ContentView: View {
         NavigationView {
             ZStack {
                 List {
-                    ForEach(pictures, id: \.self) { picture in
+                    ForEach(memories.list) { memory in
                         NavigationLink(destination: Text("Picture details view")) {
-                            Text(picture)
+                            HStack(spacing: 20) {
+                                Image(uiImage: memory.picture)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                    .frame(width: 50, height: 50)
+                                
+                                Text(memory.description)
+                            }
                         }
                     }
                 }
                 
-                NavigationLink(destination: AddImageView(memories: memories)) {
-                    VStack {
+                VStack {
+                    Spacer()
+                    HStack {
                         Spacer()
-                        HStack {
-                            Spacer()
+                        NavigationLink(destination: AddImageView(memories: memories)) {
                             Image(systemName: "plus")
                                 .foregroundColor(.white)
                                 .font(.title)
