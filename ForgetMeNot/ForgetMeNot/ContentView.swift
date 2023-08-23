@@ -8,25 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(sortDescriptors: []) var memories: FetchedResults<Memory>
+    
     @State private var showingAddImageView = false
-    @StateObject var memories = Memories()
     
     var body: some View {
         NavigationView {
             ZStack {
                 List {
-                    ForEach(memories.list) { memory in
+                    ForEach(memories) { memory in
                         NavigationLink(destination: MemoryDetails(memory: memory)) {
                             HStack(spacing: 20) {
-                                Image(uiImage: memory.picture)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                                    .frame(width: 50, height: 50)
+                                if memory.image != nil {
+                                    Image(uiImage: memory.image!)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                                        .frame(width: 40, height: 40)
+                                }
                                 
-                                Text(memory.description)
+                                Text(memory.wrappedName)
                             }
                         }
+                        .padding(5)
                     }
                 }
                 
@@ -34,7 +39,7 @@ struct ContentView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        NavigationLink(destination: AddImageView(memories: memories)) {
+                        NavigationLink(destination: AddImageView()) {
                             Image(systemName: "plus")
                                 .foregroundColor(.white)
                                 .font(.title)

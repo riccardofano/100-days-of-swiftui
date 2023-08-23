@@ -17,4 +17,6 @@ struct Memory: Identifiable {
 
 class Memories: ObservableObject {
     @Published var list: [Memory] = [Memory]()
+    
+    
 }

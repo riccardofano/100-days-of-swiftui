@@ -15,11 +15,11 @@ struct AddImageView: View {
     @State private var currentTag = ""
     @State private var tagged = [String]()
     
-    @ObservedObject var memories: Memories
+    @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        if imagePicked {
+        if imagePicked && uiImage != nil {
             Form {
                 Image(uiImage: uiImage!)
                     .resizable()
@@ -43,13 +43,33 @@ struct AddImageView: View {
                 }
                 
                 Button("Save") {
-                    let newMemory = Memory(
-                        picture: uiImage!,
-                        description: description,
-                        tagged: tagged
-                    )
+                    guard let image = uiImage else {
+                        return
+                    }
                     
-                    memories.list.append(newMemory)
+                    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                    let path = paths[0]
+                    
+                    let image_id = UUID()
+                    let url = path.appendingPathComponent("\(image_id).jpg")
+                    
+                    if let jpegData = image.jpegData(compressionQuality: 0.8) {
+                        try? jpegData.write(to: url, options: [.atomic, .completeFileProtection])
+                    }
+                    
+                    let newMemory = Memory(context: moc)
+                    newMemory.id = image_id
+                    newMemory.name = description
+                    
+                    for tag in tagged {
+                        let newTag = Person(context: moc)
+                        newTag.name = tag
+                        newTag.memory = newMemory
+                        
+                        try? moc.save()
+                    }
+                    
+                    try? moc.save()
                     
                     uiImage = nil
                     description = ""
@@ -61,13 +81,5 @@ struct AddImageView: View {
             ImagePicker(image: $uiImage)
                 .onChange(of: uiImage) { _ in imagePicked = true }
         }
-    }
-}
-
-struct AddImageView_Previews: PreviewProvider {
-    static let memories = Memories()
-    
-    static var previews: some View {
-        AddImageView(memories: memories)
     }
 }

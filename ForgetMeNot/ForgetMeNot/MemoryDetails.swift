@@ -12,19 +12,19 @@ struct MemoryDetails: View {
     
     var body: some View {
         VStack {
-            Image(uiImage: memory.picture)
+            Image(uiImage: memory.image!)
                 .resizable()
                 .scaledToFit()
             
             List {
                 Text("Here's who was in it!")
                     .font(.title2)
-                ForEach(memory.tagged, id: \.self) { tag in
-                    Text(tag)
+                ForEach(memory.taggedList, id: \.self) { person in
+                    Text(person.wrappedName)
                 }
             }
         }
-        .navigationTitle(memory.description)
+        .navigationTitle(memory.wrappedName)
         
     }
 }
