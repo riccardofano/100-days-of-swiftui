@@ -12,6 +12,9 @@ struct AddImageView: View {
     @State private var imagePicked = false
     @State private var description = ""
     
+    @State private var currentTag = ""
+    @State private var tagged = [String]()
+    
     @ObservedObject var memories: Memories
     @Environment(\.dismiss) var dismiss
     
@@ -24,11 +27,26 @@ struct AddImageView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 5))
                 TextField("Description", text: $description)
                 
+                Section("Appearing in the picture are:") {
+                    HStack(spacing: 20) {
+                        TextField("Person", text: $currentTag)
+                        Button("Add") {
+                            tagged.append(currentTag)
+                            currentTag = ""
+                        }
+                    }
+                    List {
+                        ForEach(tagged, id: \.self) { tag in
+                            Text(tag)
+                        }
+                    }
+                }
+                
                 Button("Save") {
                     let newMemory = Memory(
                         picture: uiImage!,
                         description: description,
-                        tagged: ["Me", "The other guy"]
+                        tagged: tagged
                     )
                     
                     memories.list.append(newMemory)

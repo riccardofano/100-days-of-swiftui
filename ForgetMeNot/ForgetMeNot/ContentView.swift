@@ -16,7 +16,7 @@ struct ContentView: View {
             ZStack {
                 List {
                     ForEach(memories.list) { memory in
-                        NavigationLink(destination: Text("Picture details view")) {
+                        NavigationLink(destination: MemoryDetails(memory: memory)) {
                             HStack(spacing: 20) {
                                 Image(uiImage: memory.picture)
                                     .resizable()
