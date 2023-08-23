@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    let pictures = [String]();
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            List {
+                ForEach(pictures, id: \.self) { picture in
+                    NavigationLink(destination: Text("Picture details view")) {
+                        Text(picture)
+                    }
+                }
+            }
+            .navigationTitle("Forget me not")
+            .toolbar {
+                Button("New") {}
+            }
         }
-        .padding()
     }
 }
 
