@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct AddImageView: View {
     @State private var uiImage: UIImage?
@@ -14,6 +15,9 @@ struct AddImageView: View {
     
     @State private var currentTag = ""
     @State private var tagged = [String]()
+    
+    @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 50, longitude: 0), span: MKCoordinateSpan(latitudeDelta: 2.5, longitudeDelta: 2.5))
+    let locationFetcher = LocationFetcher()
     
     @Environment(\.managedObjectContext) var moc
     @Environment(\.dismiss) var dismiss
@@ -42,6 +46,31 @@ struct AddImageView: View {
                     }
                 }
                 
+                Section("Add the location where the picture was taken") {
+                    ZStack {
+                        Map(coordinateRegion: $mapRegion)
+                            .ignoresSafeArea()
+                            .onAppear() {
+                                self.locationFetcher.start();
+                            }
+                        
+                        Image(systemName: "mappin")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 32)
+                            .foregroundColor(.red)
+                    }
+                    .padding(.vertical, 10)
+                    .frame(height: 300)
+                    
+                    Button("Center") {
+                        if let location = self.locationFetcher.lastKnownLocation {
+                            mapRegion.center.latitude = location.latitude
+                            mapRegion.center.longitude = location.longitude
+                        }
+                    }
+                }
+                
                 Button("Save") {
                     guard let image = uiImage else {
                         return
@@ -60,6 +89,8 @@ struct AddImageView: View {
                     let newMemory = Memory(context: moc)
                     newMemory.id = image_id
                     newMemory.name = description
+                    newMemory.latitude = mapRegion.center.latitude
+                    newMemory.longitude = mapRegion.center.longitude
                     
                     for tag in tagged {
                         let newTag = Person(context: moc)

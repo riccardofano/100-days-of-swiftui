@@ -2,7 +2,7 @@
 //  Memory+CoreDataProperties.swift
 //  ForgetMeNot
 //
-//  Created by Riccardo Fano on 2023-08-23.
+//  Created by Riccardo Fano on 2023-08-28.
 //
 //
 
@@ -19,6 +19,8 @@ extension Memory {
 
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
+    @NSManaged public var latitude: Double
+    @NSManaged public var longitude: Double
     @NSManaged public var tagged: NSSet?
     
     var image: UIImage? {
@@ -44,6 +46,7 @@ extension Memory {
     var wrappedName: String {
         name ?? "Unknown memory"
     }
+
 }
 
 // MARK: Generated accessors for tagged
