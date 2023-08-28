@@ -89,6 +89,7 @@ struct AddImageView: View {
                     let newMemory = Memory(context: moc)
                     newMemory.id = image_id
                     newMemory.name = description
+                    
                     newMemory.latitude = mapRegion.center.latitude
                     newMemory.longitude = mapRegion.center.longitude
                     
