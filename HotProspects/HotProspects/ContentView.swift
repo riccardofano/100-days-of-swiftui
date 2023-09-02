@@ -8,36 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var output = ""
-    
+    @State private var backgroundColor = Color.red
+
     var body: some View {
-        Image("example")
-            .resizable()
-            .interpolation(.none)
-            .scaledToFit()
-            .frame(width: .infinity, height: .infinity)
-            .background(.black)
-            .ignoresSafeArea()
-            
-//        Text(output)
-//            .task {
-//                await fetchReadings()
-//            }
-    }
-    
-    func fetchReadings() async {
-        let fetchTask = await Task { () -> String in
-            let url = URL(string: "https://hws.dev/readings.json")!
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let readings = try JSONDecoder().decode([Double].self, from: data)
-            return "Found \(readings.count) readings"
-        }.result
-        
-        switch fetchTask {
-        case .success(let str):
-            output = str
-        case .failure(let err):
-            output = "Error: \(err.localizedDescription)"
+        VStack {
+            Text("Hello, World!")
+                .padding()
+                .background(backgroundColor)
+
+            Text("Change Color")
+                .padding()
+                .contextMenu {
+                    Button {
+                        backgroundColor = .green
+                    } label: {
+                        Label("Green", systemImage: "star.fill")
+                        // The foreground color will be black anyway
+                            .foregroundColor(.green)
+                    }
+                    
+                    // iOS changes the button color based on the role instead
+                    Button(role: .destructive) {
+                        backgroundColor = .red
+                    } label: {
+                        Label("Red", systemImage: "checkmark.circle.fill")
+                    }
+
+                    Button {
+                        backgroundColor = .blue
+                    } label: {
+                        Label("Blue", systemImage: "square.fill")
+                    }
+                }
         }
     }
 }
