@@ -11,10 +11,18 @@ struct ContentView: View {
     @State private var output = ""
     
     var body: some View {
-        Text(output)
-            .task {
-                await fetchReadings()
-            }
+        Image("example")
+            .resizable()
+            .interpolation(.none)
+            .scaledToFit()
+            .frame(width: .infinity, height: .infinity)
+            .background(.black)
+            .ignoresSafeArea()
+            
+//        Text(output)
+//            .task {
+//                await fetchReadings()
+//            }
     }
     
     func fetchReadings() async {
