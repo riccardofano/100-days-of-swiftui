@@ -7,12 +7,22 @@
 
 import SwiftUI
 import UserNotifications
+import SamplePackage
 
 struct ContentView: View {
     @State private var backgroundColor = Color.red
+    
+    let arr = ["Hello", "Hi", "Bye", "Goodbye"]
+    var random: [String] {
+        arr.random(2)
+    }
 
     var body: some View {
         VStack {
+            ForEach(random, id: \.self) {
+                Text($0)
+            }
+            
             Button("Request permission") {
                 UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                     if success {
