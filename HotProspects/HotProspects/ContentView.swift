@@ -7,75 +7,30 @@
 
 import SwiftUI
 
-@MainActor class User: ObservableObject {
-    @Published var name = "Taylor Swift"
-}
-
-@MainActor class DelayedUpdater: ObservableObject {
-    var value = 0 {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-
-    init() {
-        for i in 1...10 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i)) {
-                self.value += 1
-            }
-        }
-    }
-}
-
 struct ContentView: View {
-    @StateObject var user = User()
-    @StateObject var updater = DelayedUpdater()
-    
-    @State private var selectedTab = "One"
+    @State private var output = ""
     
     var body: some View {
-        VStack {
-            EditView()
-            DisplayView()
-            
-            Text("Value is: \(updater.value)")
-            
-            TabView(selection: $selectedTab) {
-                Text("Tab 1")
-                    .onTapGesture {
-                        selectedTab = "Two"
-                    }
-                    .tabItem {
-                        Label("One", systemImage: "star")
-                    }
-                    .tag("One")
-                Text("Tab 2")
-                    .tabItem {
-                        Label("Two", systemImage: "circle")
-                    }
-                    .tag("Two")
+        Text(output)
+            .task {
+                await fetchReadings()
             }
+    }
+    
+    func fetchReadings() async {
+        let fetchTask = await Task { () -> String in
+            let url = URL(string: "https://hws.dev/readings.json")!
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let readings = try JSONDecoder().decode([Double].self, from: data)
+            return "Found \(readings.count) readings"
+        }.result
+        
+        switch fetchTask {
+        case .success(let str):
+            output = str
+        case .failure(let err):
+            output = "Error: \(err.localizedDescription)"
         }
-        .padding()
-        .environmentObject(user)
-    }
-}
-
-struct EditView: View {
-    @EnvironmentObject var user: User
-
-    var body: some View {
-        TextField("Name", text: $user.name)
-            .padding()
-            .background(.gray)
-    }
-}
-
-struct DisplayView: View {
-    @EnvironmentObject var user: User
-
-    var body: some View {
-        Text(user.name)
     }
 }
 
