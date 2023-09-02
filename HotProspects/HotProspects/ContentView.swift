@@ -12,13 +12,15 @@ import SwiftUI
 }
 
 struct ContentView: View {
-    @StateObject private var user = User()
+    @StateObject var user = User()
     
     var body: some View {
         VStack {
-            EditView().environmentObject(user)
-            DisplayView().environmentObject(user)
-        }.padding()
+            EditView()
+            DisplayView()
+        }
+        .padding()
+        .environmentObject(user)
     }
 }
 
