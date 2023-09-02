@@ -11,8 +11,25 @@ import SwiftUI
     @Published var name = "Taylor Swift"
 }
 
+@MainActor class DelayedUpdater: ObservableObject {
+    var value = 0 {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+
+    init() {
+        for i in 1...10 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i)) {
+                self.value += 1
+            }
+        }
+    }
+}
+
 struct ContentView: View {
     @StateObject var user = User()
+    @StateObject var updater = DelayedUpdater()
     
     @State private var selectedTab = "One"
     
@@ -20,6 +37,8 @@ struct ContentView: View {
         VStack {
             EditView()
             DisplayView()
+            
+            Text("Value is: \(updater.value)")
             
             TabView(selection: $selectedTab) {
                 Text("Tab 1")
