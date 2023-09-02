@@ -11,34 +11,22 @@ struct ContentView: View {
     @State private var backgroundColor = Color.red
 
     var body: some View {
-        VStack {
-            Text("Hello, World!")
-                .padding()
-                .background(backgroundColor)
-
-            Text("Change Color")
-                .padding()
-                .contextMenu {
-                    Button {
-                        backgroundColor = .green
-                    } label: {
-                        Label("Green", systemImage: "star.fill")
-                        // The foreground color will be black anyway
-                            .foregroundColor(.green)
-                    }
-                    
-                    // iOS changes the button color based on the role instead
+        List {
+            Text("Taylor Swift")
+                .swipeActions {
                     Button(role: .destructive) {
-                        backgroundColor = .red
+                        print("Hi")
                     } label: {
-                        Label("Red", systemImage: "checkmark.circle.fill")
+                        Label("Delete", systemImage: "minus.circle")
                     }
-
+                }
+                .swipeActions(edge: .leading) {
                     Button {
-                        backgroundColor = .blue
+                        print("Hi")
                     } label: {
-                        Label("Blue", systemImage: "square.fill")
+                        Label("Pin", systemImage: "pin")
                     }
+                    .tint(.orange)
                 }
         }
     }
