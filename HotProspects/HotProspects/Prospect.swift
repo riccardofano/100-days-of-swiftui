@@ -14,12 +14,20 @@ class Prospect: Identifiable, Codable {
     fileprivate(set) var isContacted = false
 }
 
+func getDocumentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    return paths[0]
+}
+
 @MainActor class Prospects: ObservableObject {
     let saveKey = "SavedData"
+    let saveFile = "SavedData.json"
+    
     @Published private(set) var people: [Prospect]
     
     init() {
-        if let data = UserDefaults.standard.data(forKey: saveKey) {
+        let url = getDocumentsDirectory().appendingPathComponent(saveFile)
+        if let data = try? Data(contentsOf: url) {
             if let decoded = try? JSONDecoder().decode([Prospect].self, from: data) {
                 people = decoded
                 return
@@ -30,7 +38,12 @@ class Prospect: Identifiable, Codable {
     
     private func save() {
         if let encoded = try? JSONEncoder().encode(people) {
-            UserDefaults.standard.set(encoded, forKey: saveKey)
+            let saveFileUrl = getDocumentsDirectory().appending(path: saveFile)
+            do {
+                try encoded.write(to: saveFileUrl)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
