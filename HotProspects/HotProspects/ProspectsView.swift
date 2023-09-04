@@ -13,11 +13,18 @@ enum FilterType {
     case none, contacted, uncontacted
 }
 
+enum SortType {
+    case none, name, email
+}
+
 struct ProspectsView: View {
     @EnvironmentObject var prospects: Prospects;
     
     @State private var isShowingScanner = false
+    @State private var isShowingSortingDialog = false
+    
     let filter: FilterType
+    @State private var sort: SortType = .none
     
     var title: String {
         switch filter {
@@ -44,11 +51,25 @@ struct ProspectsView: View {
             }
         }
     }
+    var sortedProspects: [Prospect] {
+        switch sort {
+        case .none:
+            return filteredProspects
+        case .name:
+            return filteredProspects.sorted {
+                $0.name < $1.name
+            }
+        case .email:
+            return filteredProspects.sorted {
+                $0.email < $1.email
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(filteredProspects) { prospect in
+                ForEach(sortedProspects) { prospect in
                     HStack {
                         if (filter == .none) {
                             Image(systemName:
@@ -100,9 +121,25 @@ struct ProspectsView: View {
                 } label: {
                     Label("Scan", systemImage: "qrcode.viewfinder")
                 }
+                Button {
+                    isShowingSortingDialog = true
+                } label: {
+                    Label("Sort", systemImage: "slider.horizontal.3")
+                }
             }
             .sheet(isPresented: $isShowingScanner) {
                 CodeScannerView(codeTypes: [.qr], simulatedData: "GuyMcGuy\ntest@example.com", completion: handleScan)
+            }
+            .confirmationDialog("Sort by", isPresented: $isShowingSortingDialog) {
+                Button("Sort by name") {
+                    sort = .name
+                }
+                Button("Sort by email") {
+                    sort = .email
+                }
+                Button("Cancel", role: .cancel) {
+                    isShowingSortingDialog = false
+                }
             }
         }
     }

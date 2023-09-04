@@ -26,14 +26,25 @@ func getDocumentsDirectory() -> URL {
     @Published private(set) var people: [Prospect]
     
     init() {
-        let url = getDocumentsDirectory().appendingPathComponent(saveFile)
-        if let data = try? Data(contentsOf: url) {
-            if let decoded = try? JSONDecoder().decode([Prospect].self, from: data) {
-                people = decoded
-                return
-            }
-        }
-        self.people = []
+//        let url = getDocumentsDirectory().appendingPathComponent(saveFile)
+//        if let data = try? Data(contentsOf: url) {
+//            if let decoded = try? JSONDecoder().decode([Prospect].self, from: data) {
+//                people = decoded
+//                return
+//            }
+//        }
+//
+        let p1 = Prospect()
+        p1.name = "AGuy"
+        p1.email = "Abc@test.com"
+        let p2 = Prospect()
+        p2.name = "BGuy"
+        p2.email = "1email@test.com"
+        let p3 = Prospect()
+        p3.name = "CGuy"
+        p3.email = "bubbly@example.com"
+        
+        self.people = [p1, p2, p3]
     }
     
     private func save() {
