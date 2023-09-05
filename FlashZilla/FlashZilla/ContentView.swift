@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 struct ContentView: View {
     @State private var currentAmount = 0.0;
@@ -19,6 +20,7 @@ struct ContentView: View {
     // whether it is currently being dragged or not
     @State private var isDragging = false
     
+    @State private var engine: CHHapticEngine?
     
     var body: some View {
         // a drag gesture that updates offset and isDragging as it moves around
@@ -46,14 +48,17 @@ struct ContentView: View {
             Text("Tap")
                 .onTapGesture {
                     print("Tapped the button")
+                    simpleSuccess()
                 }
             Text("Double tap")
                 .onTapGesture(count: 2) {
                     print("Tapped the button twice")
+                    simpleError()
                 }
             Text("Long press")
                 .onLongPressGesture {
                     print("Long pressed the button")
+                    complexSuccess()
                 }
             Text("Long long press")
                 .onLongPressGesture(minimumDuration: 2) {
@@ -112,6 +117,46 @@ struct ContentView: View {
             
         }
         .padding()
+        .onAppear(perform: prepareHaptics)
+    }
+    
+    func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+    func simpleError() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)
+    }
+    func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            engine = try CHHapticEngine()
+            try engine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
+        }
+    }
+    func complexSuccess() {
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
+        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
+        events.append(event)
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
     }
 }
 
