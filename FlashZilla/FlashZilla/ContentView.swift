@@ -9,11 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 20) {
+            Text("Tap")
+                .onTapGesture {
+                    print("Tapped the button")
+                }
+            Text("Double tap")
+                .onTapGesture(count: 2) {
+                    print("Tapped the button twice")
+                }
+            Text("Long press")
+                .onLongPressGesture {
+                    print("Long pressed the button")
+                }
+            Text("Long long press")
+                .onLongPressGesture(minimumDuration: 2) {
+                    print("Long pressed for at least 2 seconds")
+                } onPressingChanged: { inProgress in
+                    print("Is in progress: \(inProgress)")
+                }
         }
         .padding()
     }
