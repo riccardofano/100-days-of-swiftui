@@ -115,6 +115,36 @@ struct ContentView: View {
                 .offset(offset)
                 .gesture(combined)
             
+            ZStack {
+                Rectangle()
+                    .fill(.blue)
+                    .frame(width: 200, height: 200)
+                    .onTapGesture {
+                        print("Rectangle tapped!")
+                    }
+
+                Circle()
+                    .fill(.red)
+                    .frame(width: 200, height: 200)
+                    // now the corners of the circle will also respond to taps
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        print("Circle tapped!")
+                    }
+                    // This is like pointer-events: none in css
+                    //.allowsHitTesting(false)
+            }
+            
+            VStack {
+                Text("Hello")
+                Spacer().frame(height: 100)
+                Text("World")
+            }
+            // this makes it so the spacer is also a tappable area
+            // .contentShape(Rectangle())
+            .onTapGesture {
+                print("VStack tapped!")
+            }
         }
         .padding()
         .onAppear(perform: prepareHaptics)
