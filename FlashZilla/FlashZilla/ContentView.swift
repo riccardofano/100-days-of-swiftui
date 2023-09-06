@@ -9,18 +9,27 @@ import SwiftUI
 import CoreHaptics
 
 struct ContentView: View {
+    @Environment(\.scenePhase) var scenePhase
+
     let timer = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
-    @State private var counter = 0;
     
     var body: some View {
         Text("Hello world")
-            .onReceive(timer) { time in
-                if (counter == 5) {
-                    timer.upstream.connect().cancel()
-                    return
+            .onChange(of: scenePhase) { newPhase in
+                switch newPhase {
+                case .active:
+                    print("App is not active")
+                case .inactive:
+                    print("App is now inactive")
+                case .background:
+                    print("App went to the background")
+                default:
+                    print("Unknown case")
                 }
-                counter += 1;
+            }
+            .onReceive(timer) { time in
                 print("\(time)")
+                timer.upstream.connect().cancel()
             }
     }
 }
