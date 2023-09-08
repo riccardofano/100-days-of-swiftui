@@ -43,6 +43,16 @@ struct ContentView: View {
                         .stacked(at: index, in: cards.count)
                     }
                 }
+                .allowsHitTesting(timeRemaining > 0)
+                
+                if cards.isEmpty {
+                    Button("Start Again", action: resetCards)
+                        .padding()
+                        .background(.white)
+                        .foregroundColor(.black)
+                        .clipShape(Capsule())
+                        .padding(.top, 20)
+                }
             }
             
             if differentiateWithoutColor {
@@ -67,7 +77,7 @@ struct ContentView: View {
             }
         }
         .onChange(of: scenePhase) { newPhase in
-            isActive = newPhase == .active
+            isActive = newPhase == .active && !cards.isEmpty
         }
         .onReceive(timer) { time in
             guard isActive else { return }
@@ -80,6 +90,16 @@ struct ContentView: View {
     
     func removeCard(at index: Int) {
         cards.remove(at: index)
+        
+        if cards.isEmpty {
+            isActive = false
+        }
+    }
+    
+    func resetCards() {
+        cards = [Card](repeating: Card.example, count: 10)
+        timeRemaining = 100
+        isActive = true
     }
 }
 
