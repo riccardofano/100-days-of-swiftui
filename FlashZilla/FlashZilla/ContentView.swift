@@ -13,13 +13,14 @@ struct ContentView: View {
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     @Environment(\.scenePhase) var scenePhase
     
-    @State private var cards = [Card](repeating: Card.example, count: 10)
+    @State private var cards = [Card]()
     @State private var timeRemaining = 100
     @State private var isActive = true
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
+    @State private var showingEditScreen = false
+    
     var body: some View {
-        
         ZStack {
             Image(decorative: "background")
                 .resizable()
@@ -36,7 +37,7 @@ struct ContentView: View {
                 
                 ZStack {
                     ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: Card.example) {
+                        CardView(card: cards[index]) {
                             withAnimation {
                                 removeCard(at: index)
                             }
@@ -57,6 +58,26 @@ struct ContentView: View {
                         .padding(.top, 20)
                 }
             }
+            
+            VStack {
+                HStack {
+                    Spacer()
+
+                    Button {
+                        showingEditScreen = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .padding()
+                            .background(.black.opacity(0.7))
+                            .clipShape(Circle())
+                    }
+                }
+
+                Spacer()
+            }
+            .foregroundColor(.white)
+            .font(.largeTitle)
+            .padding()
             
             if differentiateWithoutColor || voiceOverEnabled {
                 VStack {
@@ -97,6 +118,8 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $showingEditScreen, onDismiss: resetCards, content: EditCardsView.init)
+        .onAppear(perform: resetCards)
         .onChange(of: scenePhase) { newPhase in
             isActive = newPhase == .active && !cards.isEmpty
         }
@@ -122,6 +145,15 @@ struct ContentView: View {
         cards = [Card](repeating: Card.example, count: 10)
         timeRemaining = 100
         isActive = true
+        loadData()
+    }
+    
+    func loadData() {
+        if let data = UserDefaults.standard.data(forKey: "Cards") {
+            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
+                cards = decoded
+            }
+        }
     }
 }
 
