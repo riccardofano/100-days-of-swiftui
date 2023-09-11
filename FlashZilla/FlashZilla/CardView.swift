@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     let card: Card
-    var removal: (() -> Void)? = nil
+    var removal: ((_ wasWrong: Bool) -> Void)? = nil
     
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
@@ -79,7 +79,7 @@ struct CardView: View {
                             feedback.notificationOccurred(.error)
                         }
 
-                        removal?()
+                        removal?(offset.width <= 0)
                     } else {
                         offset = .zero
                     }

@@ -20,8 +20,10 @@ struct ContentView: View {
     
     @State private var showingEditScreen = false
     
+    
     var body: some View {
-        ZStack {
+        print(cards)
+        return ZStack {
             Image(decorative: "background")
                 .resizable()
                 .ignoresSafeArea()
@@ -36,11 +38,9 @@ struct ContentView: View {
                     .clipShape(Capsule())
                 
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
-                            withAnimation {
-                                removeCard(at: index)
-                            }
+                    ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
+                        CardView(card: card) { wasWrong in
+                            removeCard(at: index, wasWrong: wasWrong)
                         }
                         .stacked(at: index, in: cards.count)
                         .allowsHitTesting(index == cards.count - 1)
@@ -86,7 +86,7 @@ struct ContentView: View {
                     HStack {
                         Button {
                             withAnimation {
-                                removeCard(at: cards.count - 1)
+                                removeCard(at: cards.count - 1, wasWrong: true)
                             }
                         } label: {
                             Image(systemName: "xmark.circle")
@@ -101,7 +101,7 @@ struct ContentView: View {
 
                         Button {
                             withAnimation {
-                                removeCard(at: cards.count - 1)
+                                removeCard(at: cards.count - 1, wasWrong: false)
                             }
                         } label: {
                             Image(systemName: "checkmark.circle")
@@ -132,9 +132,15 @@ struct ContentView: View {
         }
     }
     
-    func removeCard(at index: Int) {
+    func removeCard(at index: Int, wasWrong: Bool) {
         guard index >= 0 else { return }
-        cards.remove(at: index)
+        
+        let removed = cards.remove(at: index)
+        if (wasWrong) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                cards.insert(removed, at: 0)
+            }
+        }
         
         if cards.isEmpty {
             isActive = false
