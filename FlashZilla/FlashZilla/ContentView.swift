@@ -22,8 +22,7 @@ struct ContentView: View {
     
     
     var body: some View {
-        print(cards)
-        return ZStack {
+        ZStack {
             Image(decorative: "background")
                 .resizable()
                 .ignoresSafeArea()
