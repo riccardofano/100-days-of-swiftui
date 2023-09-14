@@ -20,15 +20,18 @@ struct ContentView: View {
                             .frame(maxWidth: .infinity)
                             .background(colors[index % 7])
                             .rotation3DEffect(.degrees(geo.frame(in: .global).minY - fullView.size.height / 2) / 5, axis: (x: 0, y: 1, z: 0))
-                            .opacity({
-                                let maxY = geo.frame(in: .global).maxY
-                                return maxY < 200 ? (maxY / 200) - 0.2 : 1
-                            }())
+                            .opacity(geo.frame(in: .global).minY / 200)
+                            .scaleEffect(applyScaleEffect(geo: geo, fullView: fullView))
                     }
                     .frame(height: 40)
                 }
             }
         }
+    }
+    
+    func applyScaleEffect(geo: GeometryProxy, fullView: GeometryProxy) -> Double {
+        let normalizedY = geo.frame(in: .global).midY / fullView.frame(in: .global).maxY + 0.5
+        return max(normalizedY, 0.5)
     }
 }
 
