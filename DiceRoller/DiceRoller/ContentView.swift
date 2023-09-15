@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    let dieFaces = [4, 6, 8, 10, 12, 20, 100]
+    @State private var selectedDie = 6
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            Form {
+                Section("Number of faces") {
+                    Picker("", selection: $selectedDie) {
+                        ForEach(dieFaces, id: \.self) {
+                            Text("\($0)")
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+            .navigationTitle("Dice roller")
         }
-        .padding()
     }
 }
 
