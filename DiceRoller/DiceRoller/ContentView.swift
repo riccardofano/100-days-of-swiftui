@@ -12,6 +12,11 @@ struct ContentView: View {
     @State private var selectedDie = 6
     
     @State private var randomedValue = 6
+    @State private var rollResults = [Int]()
+    
+    let timerTicks = 10
+    @State private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    @State private var ticksRemaining: Int? = nil
     
     var body: some View {
         NavigationView {
@@ -23,12 +28,12 @@ struct ContentView: View {
                 }
                 
                 Button("Roll") {
-                    randomedValue = Int.random(in: 1..<selectedDie+1)
+                    self.timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+                    self.ticksRemaining = 10
                 }
                 
                 HStack {
                     Spacer()
-                    
                     Text("\(randomedValue)")
                         .font(.largeTitle.bold())
                         .frame(width: 100, height: 100)
@@ -37,10 +42,32 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(.black, lineWidth: 5)
                         )
-                        .padding(.top, 30)
+                        .padding(.vertical, 30)
                     Spacer()
                 }
                 .listRowBackground(Color.white.opacity(0))
+                
+                if (rollResults.count > 0) {
+                    Section("Previous results") {
+                        ForEach(0..<rollResults.count, id: \.self) { index in
+                            Text("\(rollResults[index])")
+                        }
+                    }
+                }
+                
+            }
+            .onReceive(timer) { time in
+                guard let ticks = ticksRemaining else {
+                    return
+                }
+                
+                if ticks > 0 {
+                    self.ticksRemaining = ticks - 1
+                    randomedValue = Int.random(in: 1...selectedDie)
+                } else {
+                    timer.upstream.connect().cancel()
+                    rollResults.append(randomedValue)
+                }
             }
             .navigationTitle("Dice roller")
         }
