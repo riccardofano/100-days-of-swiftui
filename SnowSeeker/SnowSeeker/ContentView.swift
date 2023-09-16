@@ -12,23 +12,25 @@ struct User: Identifiable {
 }
 
 struct ContentView: View {
-    @State private var user: User? = nil
-    @State private var isShowingUser = false
-    
+    @Environment(\.horizontalSizeClass) var sizeClass
+
     var body: some View {
-        Text("Hello world")
-            .onTapGesture {
-                user = User()
-                isShowingUser = true
-            }
-            .sheet(item: $user) { user in
-                Text(user.id)
-            }
-            .alert("Welcome", isPresented: $isShowingUser, presenting: user) { user in
-                Button(user.id) { }
-            }
-            // Same result as having a Button("OK") inside the alert body
-            .alert("Default alert", isPresented: $isShowingUser) { }
+        if sizeClass == .compact {
+            VStack(content: UserView.init)
+        } else {
+            HStack(content: UserView.init)
+        }
+    }
+}
+
+struct UserView: View {
+    var body: some View {
+        Group {
+            Text("Name: Paul")
+            Text("Country: England")
+            Text("Pets: Luna and Arya")
+        }
+        .font(.title)
     }
 }
 
