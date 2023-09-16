@@ -7,21 +7,28 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    var body: some View {
-        NavigationView {
-            NavigationLink {
-                Text("New secondary")
-            } label: {
-                Text("Hello, World!")
-            }
-            .navigationTitle("Primary")
+struct User: Identifiable {
+    var id = "Taylor Swift"
+}
 
-            Text("Secondary")
-//                .navigationBarHidden(true)
-            
-            Text("Third view")
-        }
+struct ContentView: View {
+    @State private var user: User? = nil
+    @State private var isShowingUser = false
+    
+    var body: some View {
+        Text("Hello world")
+            .onTapGesture {
+                user = User()
+                isShowingUser = true
+            }
+            .sheet(item: $user) { user in
+                Text(user.id)
+            }
+            .alert("Welcome", isPresented: $isShowingUser, presenting: user) { user in
+                Button(user.id) { }
+            }
+            // Same result as having a Button("OK") inside the alert body
+            .alert("Default alert", isPresented: $isShowingUser) { }
     }
 }
 
