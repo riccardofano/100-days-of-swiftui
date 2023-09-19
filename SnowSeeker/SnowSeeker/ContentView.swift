@@ -17,15 +17,22 @@ extension View {
     }
 }
 
+enum Order {
+    case unset, byName, byCountry
+}
+
 struct ContentView: View {
     let resorts: [Resort] = Bundle.main.decode("resorts.json")
     
     @State private var searchText = ""
     @StateObject var favorites = Favorites()
     
+    @State private var order: Order = .unset
+    @State private var isShowingOrderBox = false
+    
     var body: some View {
         NavigationView {
-            List(filteredResorts) { resort in
+            List(orderedResorts) { resort in
                 NavigationLink {
                     ResortView(resort: resort)
                 } label: {
@@ -61,6 +68,15 @@ struct ContentView: View {
             }
             .navigationTitle("Resorts")
             .searchable(text: $searchText, prompt: "Search for a resort")
+            .toolbar {
+                Button("Order by") { isShowingOrderBox = true }
+            }
+            .confirmationDialog("Order by", isPresented: $isShowingOrderBox) {
+                Button("Default") { order = .unset }
+                Button("By name") { order = .byName }
+                Button("By country") { order = .byCountry }
+                Button("Cancel", role: .cancel) {}
+            }
             
             WelcomeView()
         }
@@ -73,6 +89,21 @@ struct ContentView: View {
             return resorts
         } else {
             return resorts.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
+    
+    var orderedResorts: [Resort] {
+        switch order {
+        case .unset:
+            return filteredResorts
+        case .byName:
+            return filteredResorts.sorted {
+                $0.name < $1.name
+            }
+        case .byCountry:
+            return filteredResorts.sorted {
+                $0.country < $1.country
+            }
         }
     }
 }
