@@ -2,6 +2,10 @@
 
 This repository contains my progress and solutions for the "100 Days of Swift" course. The course is designed to help me learn and practice Swift programming language concepts through a series of hands-on projects and challenges.
 
+## Progress:
+
+Done!
+
 ## About the Course
 
 **100 Days of Swift** is a comprehensive course created by Paul Hudson, founder of Hacking with Swift. The course is divided into 100 days, each consisting of a new topic or project to work on. The course is suitable for beginners as well as experienced developers who want to strengthen their Swift skills.
@@ -9,6 +13,7 @@ This repository contains my progress and solutions for the "100 Days of Swift" c
 ## Getting Started
 
 I create a tag at the end of each day. If you'd like to see my progress at any given day you can run:
+
 ```
 git checkout day{number}
 ```
